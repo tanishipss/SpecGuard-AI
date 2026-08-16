@@ -1,14 +1,16 @@
 {
-  "timestamp": "2026-08-16T20:11:48.164113+00:00",
+  "timestamp": "2026-08-16T20:40:08.280701+00:00",
   "total_dataset_questions": 45,
   "scored_question_count": 1,
   "partial": true,
   "citation_correctness_rate": 1.0,
   "hallucination_rate": 0.0,
   "precision_at_5": 0.2,
+  "recall_at_5": 1.0,
+  "mrr": 1.0,
   "precision_scored_question_count": 1,
-  "faithfulness": 1.0,
-  "answer_relevance": 0.8251805294572011,
+  "faithfulness": 0.9696969696969697,
+  "answer_relevance": 0.8263654487004222,
   "context_relevance": 0.19999999998,
   "message": "Scored 1/45 dataset questions (partial run)."
 }
