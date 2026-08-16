@@ -1,0 +1,976 @@
+Flagged gold_sections review — full chunk text for manual read-through.
+Read-only: this script does not modify dataset.json or the database.
+
+====================================================================================================
+[q002] (factual) What does the acronym SMF stand for and what is its role in a PDU session?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.502#5.2.8.2.9 ---
+  Nsmf_PDUSession_StatusNotify service operation  (page 651-651)
+  Service operation name: Nsmf_PDUSession_StatusNotify.  Description: This service operation is used
+  by the SMF to notify its consumers about the status of a PDU Session (e.g.  PDU Session is released
+  due to local reasons within the H-SMF, PDU Session handover to a different system or access  type,
+  triggering I-SMF reselection for the PDU Session).  Input, Required: Status information.  Input,
+  Optional: Cause, Small Data Rate Control Status, APN Rate Control Status, target DNAI information.
+  Output, Required: Result Indication.  Output, Optional: None.
+
+  --- 23.501#5.15.5.3 ---
+  Establishing a PDU Session in a Network Slice  (page 237-238)
+  SMF discovery and selection within the selected Network Slice instance is initiated by the AMF when
+  a SM message to  establish a PDU Session is received from the UE. The appropriate NRF is used to
+  assist the discovery and selection  tasks of the required network functions for the selected Network
+  Slice instance.  The AMF queries the appropriate NRF to select an SMF in a Network Slice instance
+  based on S-NSSAI, DNN, NSI-ID  (if available) and other information e.g. UE subscription and local
+  operator policies, when the UE triggers PDU Session  Establishment. The selected SMF establishes a
+  PDU Session based on S-NSSAI and DNN.  When the AMF belongs to multiple Network Slice instances,
+  based on configuration, the AMF may use an NRF at the  appropriate level for the SMF selection.  For
+  further details on the SMF selection, refer to clause 4.3.2.2.3 of TS 23.502 [3].  When a PDU
+  Session for a given S-NSSAI is established using a specific Network Slice instance, the CN provides
+  to  the (R)AN the S-NSSAI corresponding to this Network Slice instance to enable the RAN to perform
+  access specific  functions.  The UE shall not perform PDU Session handover from one Access Type to
+  another if the S-NSSAI of the PDU Session  is not included in the Allowed NSSAI of the target Access
+  Type.
+
+  --- 23.501#5.34.3 ---
+  I-SMF selection, V-SMF reselection  (page 399-400)
+  The AMF is responsible of detecting when to add or to remove an I-SMF or a V-SMF for a PDU Session.
+  For this  purpose, the AMF gets from NRF information about the Service Area and supported DNAI(s) of
+  SMF(s).  During mobility events such as Hand-Over or AMF change, if the service area of the SMF does
+  not include the new UE  location, then the AMF selects and inserts an I-SMF which can serve the UE
+  location and the S-NSSAI. Conversely if  the AMF detects that an I-SMF is no more needed (as the
+  service area of the SMF includes the new UE location) it  removes the I-SMF and interfaces directly
+  with the SMF of the PDU Session. If the AMF detects that the SMF cannot  serve the UE location (e.g.
+  due to mobility), then the AMF selects a new I-SMF serving the UE location. If the existing  I-SMF
+  (or V-SMF) cannot serve the UE location (e.g. due to mobility) and the service area of the SMF does
+  not include  the new UE location (or the PDU Session is Home Routed), then the AMF initiates an
+  I-SMF (or V-SMF) change. A V-  SMF change may take place either at intra-PLMN or inter-PLMN
+  mobility.  According to the PCC rules related with AF influence traffic mechanism regarding DNAI(s),
+  the SMF determines the  target DNAI which is applicable to the current UE location. If current
+  (I-)SMF cannot serve the target DNAI or if the  SMF can server the target DNAI and existing I-SMF is
+  not needed, the SMF may send the target DNAI information to  the AMF for triggering I-SMF
+  (re)selection or removal, e.g. the AMF performs I-SMF (re)selection or removal based  on the target
+  DNAI and supported DNAI(s) of (I-)SMF. If the SMF determines that target DNAI currently served by I-
+  SMF should not be used for the PDU Session hence the existing I-SMF is not needed (e.g. due to the
+  updated PCC rules  removes DNAI(s) that was provided in the previous PCC rules), the SMF sends the
+  target DNAI information without  including target DNAI to AMF, which may trigger the I-SMF removal.
+  At PDU Session Establishment in non-roaming and roaming with LBO scenarios, if the AMF or SCP cannot
+  select an  SMF with a Service Area supporting the current UE location for the selected (DNN,
+  S-NSSAI) and required SMF  capabilities, the AMF selects an SMF for the selected (DNN, S-NSSAI) and
+  required capabilities and in addition selects  an I-SMF serving the UE location and the S-NSSAI.
+  Compared to the SMF selection function defined in clause 6.3.2, the following parameters are not
+  applicable for I-  SMF/V-SMF selection:  -  Data Network Name (DNN).  -  Subscription information
+  from UDM.  NOTE 1: All SMF(s) and I-SMF are assumed to be able to control the UPF mapping between
+  EPC bearers and  5GC QoS Flows.  If delegated SMF discovery is used at PDU Session establishment:
+  1. The AMF sends Nsmf_PDUSession_CreateSMContext Request to SCP and includes the parameters as
+  defined  in clause 6.3.2 (e.g. the DNN, required SMF capabilities, UE location) as discovery and
+  selection parameters. If  the SCP successfully selects an SMF matching all discovery and selection
+  parameters, the SCP forwards the  Nsmf_PDUSessionCreateSMContext Request to the selected SMF.  2. If
+  the SCP cannot select an SMF matching all discovery and selection parameters, the SCP returns a
+  dedicated  error to AMF. In this case the I-SMF also need be discovered.  3. Upon reception of the
+  error from the SCP that an SMF matching all discovery and selection parameters cannot  be found, the
+  AMF performs the discovery and selection of the SMF from NRF (thus not providing the UE  location as
+  a discovery parameter). The AMF may indicate the maximum number of SMF instances to be  returned
+  from NRF, i.e. SMF selection at NRF.
+
+
+====================================================================================================
+[q005] (factual) What is network slicing in the context of the 5G System?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#4.1 ---
+  General concepts  (page 35-36)
+  The 5G System architecture is defined to support data connectivity and services enabling deployments
+  to use techniques  such as e.g. Network Function Virtualization and Software Defined Networking. The
+  5G System architecture shall  leverage service-based interactions between Control Plane (CP) Network
+  Functions where identified. Some key  principles and concept are to:  -  Separate the User Plane
+  (UP) functions from the Control Plane (CP) functions, allowing independent scalability,  evolution
+  and flexible deployments e.g. centralized location or distributed (remote) location.  -  Modularize
+  the function design, e.g. to enable flexible and efficient network slicing.  -  Wherever applicable,
+  define procedures (i.e. the set of interactions between network functions) as services, so  that
+  their re-use is possible.  -  Enable each Network Function and its Network Function Services to
+  interact with other NF and its Network  Function Services directly or indirectly via a Service
+  Communication Proxy if required. The architecture does  not preclude the use of another intermediate
+  function to help route Control Plane messages (e.g. like a DRA).  -  Minimize dependencies between
+  the Access Network (AN) and the Core Network (CN). The architecture is  defined with a converged
+  core network with a common AN - CN interface which integrates different Access  Types e.g. 3GPP
+  access and non-3GPP access.  -  Support a unified authentication framework.  -  Support "stateless"
+  NFs, where the "compute" resource is decoupled from the "storage" resource.  -  Support capability
+  exposure.  -  Support concurrent access to local and centralized services. To support low latency
+  services and local access to  data networks, UP functions can be deployed close to the Access
+  Network.  -  Support roaming with both Home routed traffic as well as Local breakout traffic in the
+  visited PLMN.
+
+  --- 23.501#4.2.2 ---
+  Network Functions and entities  (page 37-38)
+  The 5G System architecture consists of the following network functions (NF):  -  Authentication
+  Server Function (AUSF).  -  Access and Mobility Management Function (AMF).  -  Data Network (DN),
+  e.g. operator services, Internet access or 3rd party services.  -  Unstructured Data Storage
+  Function (UDSF).  -  Network Exposure Function (NEF).  -  Network Repository Function (NRF).  -
+  Network Slice Admission Control Function (NSACF).  -  Network Slice-specific and SNPN Authentication
+  and Authorization Function (NSSAAF).  -  Network Slice Selection Function (NSSF).  -  Policy Control
+  Function (PCF).  -  Session Management Function (SMF).  -  Unified Data Management (UDM).  -
+  Unified Data Repository (UDR).  -  User Plane Function (UPF).  -  UE radio Capability Management
+  Function (UCMF).  -  Application Function (AF).  -  User Equipment (UE).  -  (Radio) Access Network
+  ((R)AN).  -  5G-Equipment Identity Register (5G-EIR).  -  Network Data Analytics Function (NWDAF).
+  -  CHarging Function (CHF).  -  Time Sensitive Networking AF (TSN AF).  -  Time Sensitive
+  Communication and Time Synchronization Function (TSCTSF).  -  Data Collection Coordination Function
+  (DCCF).  -  Analytics Data Repository Function (ADRF).  -  Messaging Framework Adaptor Function
+  (MFAF).  -  Non-Seamless WLAN Offload Function (NSWOF).  NOTE:  The functionalities provided by DCCF
+  and/or ADRF can also be hosted by an NWDAF.  -  Edge Application Server Discovery Function (EASDF).
+  The 5G System architecture also comprises the following network entities:  -  Service Communication
+  Proxy (SCP).  -  Security Edge Protection Proxy (SEPP).  The functional descriptions of these
+  Network Functions and entities are specified in clause 6.  -  Non-3GPP InterWorking Function
+  (N3IWF).  -  Trusted Non-3GPP Gateway Function (TNGF).  -  Wireline Access Gateway Function (W-AGF).
+  -  Trusted WLAN Interworking Function (TWIF).
+
+  --- 23.501#5.15.8 ---
+  Configuration of Network Slice availability in a PLMN  (page 240-241)
+  A Network Slice may be available in the whole PLMN or in one or more Tracking Areas of the PLMN.
+  The availability of a Network Slice refers to the support of the S-NSSAI in the involved NFs. In
+  addition, policies in the  NSSF may further restrict from using certain Network Slices in a
+  particular TA, e.g. depending on the HPLMN of the  UE.  The availability of a Network Slice in a TA
+  is established end-to-end using a combination of OAM and signalling  among network functions. It is
+  derived by using the S-NSSAIs supported per TA in 5G-AN, the S-NSSAIs supported in  the AMF and
+  operator policies per TA in the NSSF.  The AMF learns the S-NSSAIs supported per TA by the 5G-AN
+  when the 5G-AN nodes establish or update the N2  connection with the AMF (see TS 38.413 [34]) and TS
+  38.300 [27]). One or all AMF per AMF Set provides and  updates the NSSF with the S-NSSAIs support
+  per TA. The 5G-AN learns the S-NSSAIs per PLMN ID the AMFs it  connects to support when the 5G-AN
+  nodes establishes the N2 connection with the AMF or when the AMF updates the  N2 connection with the
+  5G-AN (see TS 38.413 [34] and TS 38.300 [27]).  The NSSF may be configured with operator policies
+  specifying under what conditions the S-NSSAIs can be restricted  per TA and per HPLMN of the UE.
+  The per TA restricted S-NSSAIs may be provided to the AMFs of the AMF Sets at setup of the network
+  and whenever  changed.  The AMF may be configured for the S-NSSAIs it supports with operator
+  policies specifying any restriction per TA and  per HPLMN of the UE.
+
+
+====================================================================================================
+[q007] (factual) What is the N2 reference point used for?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#4.2.8.3.1 ---
+  Overview  (page 58-59)
+  The description of the reference points specific for the non-3GPP access:  N2, N3, N4, N6: these are
+  defined in clause 4.2.  Y1  Reference point between the UE and the untrusted non-3GPP access (e.g.
+  WLAN). This depends on the  non-3GPP access technology and is outside the scope of 3GPP.  Y2
+  Reference point between the untrusted non-3GPP access and the N3IWF for the transport of NWu
+  traffic.  Y4  Reference point between the 5G-RG and the W-AGF which transports the user plane
+  traffic and the N1  NAS protocol. The definition of this interface is outside the scope of 3GPP.  Y5
+  Reference point between the FN-RG and the W-AGF. The definition of this interface is outside the
+  scope  of 3GPP.  Yt  Reference point between the UE and the TNAP. See e.g. Figure 4.2.8.2.1-2.  Yt'
+  Reference point between the N5CW devices and the TWAP. It is defined in clause 4.2.8.5.  NWu
+  Reference point between the UE and N3IWF for establishing secure tunnel(s) between the UE and  N3IWF
+  so that control-plane and user-plane exchanged between the UE and the 5G Core Network is
+  transferred securely over untrusted non-3GPP access.  NWt  Reference point between the UE and the
+  TNGF. A secure NWt connection is established over this  reference point, as specified in clause
+  4.12a.2.2 of TS 23.502 [3]. NAS messages between the UE and the  AMF are transferred via this NWt
+  connection.  Ta  A reference point between the TNAP and the TNGF, which is used to support an AAA
+  interface. Ta  requirements are documented in clause 4.2.8.3.2.  Tn  A reference point between two
+  TNGFs, which is used to facilitate UE mobility between different TNGFs  (inter-TNGF mobility).  Tn
+  and inter-TNGF mobility are not specified in this Release of the specification.
+
+  --- 23.501#4.4.2.2 ---
+  Reference point to support SMS over NAS  (page 78-78)
+  N1:  Reference point for SMS transfer between UE and AMF via NAS.  Following reference points are
+  realized by service based interfaces:  N8:  Reference point for SMS Subscription data retrieval
+  between AMF and UDM.  N20:  Reference point for SMS transfer between AMF and SMS Function.  N21:
+  Reference point for SMS Function address registration management and SMS Management Subscription
+  data retrieval between SMS Function and UDM.
+
+  --- 23.501#4.2.8.5.4 ---
+  Reference Points  (page 61-62)
+  The Yt' and Yw reference points are both outside the scope of the 3GPP specifications. The Yt'
+  reference point  transports WLAN messages (e.g. IEEE 802.11 messages), while the Yw reference point:
+  -  Shall be able to transport authentication messages between the TNAP and the TWIF for enabling
+  authentication  of a N5CW device;  -  Shall allow the N5CW device to request and receive IP
+  configuration from the TWIF, including an IP address,  e.g. with DHCP.  -  Shall support the
+  transport of user-plane traffic for the N5CW device.  The N1, N2 and N3 reference points are the
+  same reference points defined in clause 4.2.7.
+
+
+====================================================================================================
+[q010] (factual) What does S-NSSAI stand for and what is it used for?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#5.15.2.1 ---
+  General  (page 224-225)
+  An S-NSSAI identifies a Network Slice.  An S-NSSAI is comprised of:  -  A Slice/Service type (SST),
+  which refers to the expected Network Slice behaviour in terms of features and  services;  -  A Slice
+  Differentiator (SD), which is optional information that complements the Slice/Service type(s) to
+  differentiate amongst multiple Network Slices of the same Slice/Service type.  An S-NSSAI can have
+  standard values (i.e. such S-NSSAI is only comprised of an SST with a standardised SST value,  see
+  clause 5.15.2.2, and no SD) or non-standard values (i.e. such S-NSSAI is comprised of either both an
+  SST and an  SD or only an SST without a standardised SST value and no SD). An S-NSSAI with a non-
+  standard value identifies a  single Network Slice within the PLMN with which it is associated. An
+  S-NSSAI with a non-standard value shall not be  used by the UE in access stratum procedures in any
+  PLMN other than the one to which the S-NSSAI is associated.  The S-NSSAIs in the NSSP of the URSP
+  rules (see clause 6.6.2 of TS 23.503 [45]) and in the Subscribed S-NSSAIs  (see clause 5.15.3)
+  contain only HPLMN S-NSSAI values.  The S-NSSAIs in the Configured NSSAI, the Allowed NSSAI (see
+  clause 5.15.4.1), the Requested NSSAI (see  clause 5.15.5.2.1), the Rejected S-NSSAIs contain only
+  values from the Serving PLMN. The Serving PLMN can be the  HPLMN or a VPLMN.  The S-NSSAI(s) in the
+  PDU Session Establishment contain one Serving PLMN S-NSSAI value and in addition may  contain a
+  corresponding HPLMN S-NSSAI value to which this first value is mapped (see clause 5.15.5.3).  The
+  optional mapping of Serving PLMN S-NSSAIs to HPLMN S-NSSAIs contains Serving PLMN S-NSSAI values
+  and corresponding mapped HPLMN S-NSSAI values.  The NSSAI is a collection of S-NSSAIs. An NSSAI may
+  be a Configured NSSAI, a Requested NSSAI or an Allowed  NSSAI. There can be at most eight S-NSSAIs
+  in Allowed and Requested NSSAIs sent in signalling messages between  the UE and the Network. The
+  Requested NSSAI signalled by the UE to the network allows the network to select the  Serving AMF,
+  Network Slice(s) and Network Slice instance(s) for this UE, as specified in clause 5.15.5.  Based on
+  the operator's operational or deployment needs, a Network Slice instance can be associated with one
+  or more  S-NSSAIs, and an S-NSSAI can be associated with one or more Network Slice instances.
+  Multiple Network Slice  instances associated with the same S-NSSAI may be deployed in the same or in
+  different Tracking Areas. When  multiple Network Slice instances associated with the same S-NSSAI
+  are deployed in the same Tracking Areas, the  AMF instance serving the UE may logically belong to
+  (i.e. be common to) more than one Network Slice instance  associated with this S-NSSAI.  In a PLMN,
+  when an S-NSSAI is associated with more than one Network Slice instance, one of these Network Slice
+  instances, as a result of the Network Slice instance selection procedure defined in clause 5.15.5,
+  serves a UE that is  allowed to use this S-NSSAI. For any S-NSSAI, the network may at any one time
+  serve the UE with only one Network  Slice instance associated with this S-NSSAI until cases occur
+  where e.g. this Network Slice instance is no longer valid  in a given Registration Area, or a change
+  in UE's Allowed NSSAI occurs, etc. In such cases, procedures mentioned in  clause 5.15.5.2.2 or
+  clause 5.15.5.2.3 apply.  Based on the Requested NSSAI (if any) and the Subscription Information,
+  the 5GC is responsible for selection of a
+
+  --- 23.501#5.19.7.4 ---
+  S-NSSAI based congestion control  (page 289-290)
+  S-NSSAI based congestion control is designed for the purpose of avoiding and handling of NAS
+  signalling congestion  for the UEs with back-off timer associated with or without an S-NSSAI
+  regardless of the presence of a DNN.  The UE associates the received back-off time with the S-NSSAI
+  and DNN (i.e. no S-NSSAI and no DNN, no S-NSSAI,  S-NSSAI only, an S-NSSAI and a DNN) which was
+  included in the uplink NAS MM message carrying the  corresponding NAS SM request message for the
+  PLMN which is under congestion.  S-NSSAI based congestion control is applied as follows:  -  If an
+  S-NSSAI is determined as congested, then the SMF may apply S-NSSAI based congestion control towards
+  the UE for SM requests except for those sent for the purpose of reporting 3GPP PS Data Off status
+  change for a  specific S-NSSAI and provides a back-off time and an indication of HPLMN congestion;
+  -  If the UE receives an S-NSSAI based back-off time without an indication of HPLMN congestion, the
+  UE shall  apply the S-NSSAI back-off timer only in the PLMN in which the back-off time was received.
+  If the UE receives  S-NSSAI based back-off time with an indication of HPLMN congestion, the UE shall
+  apply the S-NSSAI based  back-off timer in the PLMN in which the back-off time was received and in
+  any other PLMN;  -  The SMF may release PDU Sessions belonging to a congested S-NSSAI by sending a
+  PDU Session Release  Request message towards the UE with a back-off time associated either to the
+  S-NSSAI only (i.e. with no  specific DNN) or a combination of the S-NSSAI and a specific DNN. If
+  NWDAF is deployed, the SMF may  make use of Session Management Congestion Control Experience
+  analytics provided by NWDAF, as defined in  clause 6.12 of TS 23.288 [86], to determine back-off
+  timer provided to UEs;  NOTE:  For example, the SMF can apply a short back-off timer to the UEs in
+  the list of high-experienced UEs  while the SMF can apply a long back-off timer to the UEs in the
+  list of low-experienced UEs.  -  If S-NSSAI based congestion control is activated at AMF e.g.
+  configured by OAM and an S-NSSAI is  determined as congested, then the AMF applies S-NSSAI based
+  congestion control towards the UE for UE-  initiated Session Management requests. In this case, the
+  AMF provides a NAS Transport Error message for the  NAS Transport message carrying the SM message,
+  and in the NAS Transport Error message it includes a back-  off timer; If NWDAF is deployed, the AMF
+  may determine that S-NSSAI is congested based on the network  slice load level analytics defined in
+  TS 23.288 [86].  -  The UE behaves as follows in the PLMN where the S-NSSAI based congestion control
+  applies when the back-  off timer is running:  -  If the back-off timer was associated with an
+  S-NSSAI only (i.e. not associated with an S-NSSAI and a DNN),  the UE shall not initiate any Session
+  Management procedures for the congested S-NSSAI;  -  If the back-off timer was associated with an
+  S-NSSAI and a DNN, then the UE shall not initiate any Session  Management procedures for that
+  combination of S-NSSAI and DNN;  -  If the UE receives a network-initiated Session Management
+  message other than PDU Session Release  Command for the congested S-NSSAI, the UE shall stop this
+  back-off timer and respond to the 5GC;  -  If the UE receives a PDU Session Release Command message
+  for the congested S-NSSAI, it shall stop the  back-off timer unless it receives a new back-off time
+  from SMF;  -  Upon Cell/TA/PLMN/RAT change, change of untrusted non-3GPP access network or change of
+  Access  Type, the UE shall not stop the back-off timer for any S-NSSAI or any combination of S-NSSAI
+  and DNN;  -  The UE is allowed to initiate the Session Management procedures for high priority
+  access and emergency
+
+  --- 23.502#5.2.3.3.1 ---
+  General  (page 573-582)
+  Subscription data types used in the Nudm_SubscriberDataManagement Service are defined in Table
+  5.2.3.3.1-1 below.  Table 5.2.3.3.1-1: UE Subscription data types  Subscription data  type  Field
+  Description  Access and Mobility  Subscription data  (data needed for UE  GPSI List  List of the
+  GPSI (Generic Public Subscription  Identifier) used both inside and outside of the  3GPP system to
+  address a 3GPP subscription  (see NOTE 9).  Registration and  Mobility  Management)  Internal Group
+  ID-list  List of the subscribed internal group(s) that the  UE belongs to.  Subscribed UE-AMBR  The
+  maximum aggregated uplink and downlink  MBRs to be shared across all Non-GBR QoS  Flows according to
+  the subscription of the user.  Subscribed UE-Slice-MBR(s)  List of maximum aggregated uplink and
+  downlink  MBRs to be shared across all GBR and Non-GBR  QoS Flows related to the same S-NSSAI
+  according to the subscription of the user. There is  a single uplink and a single downlink value per
+  S-  NSSAI.  Subscribed S-NSSAIs  The Network Slices that the UE subscribes to. In  the roaming case,
+  it indicates the subscribed  Network Slices applicable to the Serving PLMN  (NOTE 11).  Default
+  S-NSSAIs  The Subscribed S-NSSAIs marked as default S-  NSSAI. In the roaming case, only those
+  applicable  to the Serving PLMN (NOTE 12).  S-NSSAIs subject to Network  Slice-Specific
+  Authentication  and Authorization  The Subscribed S-NSSAIs marked as subject to  NSSAA. When
+  present, the GPSI list shall include  at least one GPSI.  Network Slice Simultaneous  Registration
+  Group Information  Optionally, for each S-NSSAI in the Subscribed S-  NSSAIs, one or more value of
+  Network Slice  Simultaneous Registration Group(s) (NOTE 11)  associated with the S-NSSAI.  UE Usage
+  Type  As defined in clause 5.15.7.2 of TS 23.501 [2].  RAT restriction  3GPP Radio Access
+  Technology(ies) not allowed  the UE to access.  Forbidden area  Defines areas in which the UE is not
+  permitted to  initiate any communication with the network.  Service Area Restriction  Indicates
+  Allowed Areas in which the UE is  permitted to initiate communication with the  network and Non-
+  allowed areas in which the UE  and the network are not allowed to initiate Service  Request or SM
+  signalling to obtain user services.  Core Network type restriction  Defines whether UE is allowed to
+  connect to 5GC  and/or EPC for this PLMN.  CAG information  The CAG information includes Allowed CAG
+  list  and, optionally an indication whether the UE is  only allowed to access 5GS via CAG cells as
+  defined in clause 5.30.3 of TS 23.501 [2].  CAG information Subscription  Change Indication  When
+  present, indicates to the serving AMF that  the CAG information in the subscription data  changed
+  and the UE must be updated.  RFSP Index  An index to specific RRM configuration in the NG-  RAN.
+  Subscribed Periodic  Registration Timer  Indicates a subscribed Periodic Registration  Timer value,
+  which may be influenced by e.g.  network configuration parameter as specified in  clause 4.15.6.3a.
+  Subscribed Active Time  Indicates a subscribed active time value, which  may be influenced by e.g.
+  network configuration  parameter as specified in clause 4.15.6.3a.  MPS priority  Indicates the user
+  is subscribed to MPS as  indicated in clause 5.16.5 of TS 23.501 [2].  MCX priority  Indicates the
+  user is subscribed to MCX as  indicated in clause 5.16.6 of TS 23.501 [2].  AMF-Associated Expected
+  UE  Behaviour parameters  Information on expected UE movement and  communication characteristics.
+  See  clause 4.15.6.3  Steering of Roaming  List of preferred PLMN/access technology  combinations
+  and/or Credentials Holder controlled  prioritized lists of preferred SNPNs and GINs or
+  HPLMN/Credentials Holder indication that no  change of the above list(s) stored in the UE is  needed
+  (see NOTE 3).  Optionally includes an indication that the UDM  requests an acknowledgement of the
+  reception of  this information from the UE.
+
+
+====================================================================================================
+[q011] (procedural) Describe the high-level steps of the UE registration procedure in the 5G System.
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.502#4.11.1.3.3 ---
+  EPS to 5GS Mobility Registration Procedure (Idle and Connected State) using  (page 250-257)
+  N26 interface  Figure 4.11.1.3.3-1 describes the mobility registration procedure from EPS to 5GS
+  when N26 is supported for idle and  connected states.  S-GW  Roaming  Scenario  UE  MME  PGW-C+  SMF
+  AMF  NG-RAN  PGW-U+  UPF  2. Registration Request  4. Registration Request  Old AMF  V-SMF  V-UPF
+  PCF  1. Registration is triggered  HSS+  UDM  3. AMF selection  5a. Context Request  5b. Context
+  Response  6a. Namf_Communication_UEContextTransfer  6b. Namf_Communication_UEContextTransfer
+  Response  7. Authentication / Security  8. Context Ack  14. step 15-16 of figure 4.2.2.2.2-1 in
+  Registration Procedure  9. step 11-12 of figure 4.2.2.2.2-1 in Registration Procedure  11. step
+  13-14e of figure 4.2.2.2.2-1 in Registration Procedure  15. Cancel Location  16. Cancel Location Ack
+  17. Registration Accept  18. Registration Complete  16a Delete Session Request  14a.
+  Nsmf_PDUSession_CreateSMContext (and Nsmf_PDUSession_Create for HR roaming)  14c. N4 Session
+  Modification  14d. Nsmf_PDUSession_CreateSMContexT Response (and Nsmf_PDUSession_Create Response)
+  14e. SM Policy Association Modification  14b. N4 Session Establishment  14f. N4 Session Modification
+  14g. steps 18-19 of figure 4.2.2.2.2-1 in Registration Procedure  17a. steps 21b of figure
+  4.2.2.2.2-1 in Registration Procedure  Figure 4.11.1.3.3-1: EPS to 5GS mobility for single-
+  registration mode with N26 interface  1. The Registration procedure is triggered, e.g. the UE moves
+  into NG-RAN coverage. Step 2 to 9 except step 5, 6  and 8 follow the Registration procedure in
+  clause 4.2.2 with following enhancement.  2. The UE sends Registration Request with registration
+  type set to "Mobility Registration Update".  The UE includes 5G-GUTI mapped from EPS GUTI as the old
+  GUTI, the native 5G-GUTI (if available) as  additional GUTI and indicating that the UE is moving
+  from EPC. The UE includes the UE Policy Container  containing the list of PSIs, indication of UE
+  support for ANDSP and OSId if available.  When the Registration Request is triggered due to UE
+  mobility from EPS to 5GS, if the UE has locally deleted  the EPS bearer which has allocated 5GS
+  parameters and the EPS bearer status has not been synchronized with  the network, the UE shall
+  include the EPS bearer status in the Registration Request. If the UE has not received  mapped 5GS
+  QoS parameters from the network for PDN connection(s), the UE locally releases those PDN
+  connection(s).  The Additional GUTI is provided both in Idle state and Connected state, if
+  available. The Additional 5G-GUTI  enables the AMF to retrieve the UE's MM context from the old AMF
+  (if available). The UE includes the S-  NSSAIs associated with the established PDN connections in
+  the Requested NSSAI in RRC and NAS (as  described in clause 5.15.7 of TS 23.501 [2]). In the case of
+  Configured NSSAI applicable to this PLMN or an  Allowed NSSAI are not present in the UE, the
+  associated HPLMN S-NSSAI(s) shall be provided in the mapping  of Requested NSSAI in the NAS as
+  described in clause 5.15.5.2.1 TS 23.501 [2].  In the case of idle mode mobility the UE additionally
+  includes a TAU request message integrity protected using  the EPS security context (for further
+  security verification by the MME) in the Registration Request. If the UE  holds a native 5G-GUTI for
+  this PLMN then the UE also includes the GUAMI part of the native 5G-GUTI in  RRC to enable the NG-
+  RAN to route the Registration Request to the same AMF (if available) and otherwise the
+
+  --- 23.502#4.23.13.3 ---
+  Mobility procedure without N26 interface from EPC/ePDG to 5GS  (page 523-523)
+  At Handover from EPC/ePDG to 5GS, the procedure described in Figure 4.11.4.1-1 takes place, with
+  following  difference:  -  During step 2 of Figure 4.11.4.1-1 "UE requested PDU Session
+  Establishment according to clause 4.3.2.2", the  mechanisms described in clause 4.23.5.1 apply
+
+  --- 23.502#4.11.2.3 ---
+  EPS to 5GS Mobility  (page 270-273)
+  The following procedure is used by UEs in single-registration mode on mobility from EPS to 5GS.  In
+  the case of network sharing the UE selects the target PLMN ID according to clause 5.18.3 of TS
+  23.501 [2].  This procedure is also used by UEs in dual-registration mode to perform registration in
+  5GS when the UE is also  registered in EPC. The procedure is the General Registration procedure as
+  captured in clause 4.2.2. Difference from that  procedure are captured below.  The UE has one or
+  more ongoing PDN connections including one or more EPS bearers. During the PDN connection
+  establishment, the UE allocates the PDU Session ID and sends it to the SMF+PGW-C via PCO, as
+  described in  clause 4.11.1.1.  New  AMF  AUSF  SMF +  PGW-C  NG-RAN  UE  1. Registration Request
+  PCF  2. AMF selection  3. Registration Request  Old  MME  7. Registration Accept  8. Registration
+  Complete  HSS+  UDM  6. Registration Procedure  Figure 4.2.2.2.2-1  Steps 15 – 19c  4. Registration
+  Procedure  Figure 4.2.2.2.2-1  Steps 4-13  9. UE requested PDU Session Establishment Procedure  0.
+  UE is attached in EPC  10. PGW-C+SMF initiates release of transferred PDN connection  E-UTRAN  5.
+  AMF Registration in UDM   Figure 4.2.2.2.2-1  Step 14  Figure 4.11.2.3-1: Mobility procedure from
+  EPS to 5GS without N26 interface  0. The UE is attached in EPC as specified in clause 4.11.2.4.1.
+  1. Step 1 in clause 4.2.2.2.2 (General Registration) with the following clarifications:  The UE
+  indicates that it is moving from EPC. The UE in single registration mode provides the Registration
+  type  set to "mobility registration update", a 5G-GUTI mapped from the 4G-GUTI and a native 5G-GUTI
+  (if  available) as an Additional GUTI. The UE includes the UE Policy Container containing the list
+  of PSIs,  indication of UE support for ANDSP and OSId if available. The UE shall select the 5G-GUTI
+  for the additional  GUTI as follows, listed in decreasing order of preference:  -  a native 5G-GUTI
+  assigned by the PLMN to which the UE is attempting to register, if available;  -  a native 5G-GUTI
+  assigned by an equivalent PLMN to the PLMN to which the UE is attempting to register,  if available;
+  -  a native 5G-GUTI assigned by any other PLMN, if available.  The UE in dual registration mode
+  provides the Registration type set to "initial registration" and a native 5G-  GUTI or SUCI. In
+  single registration mode, the UE also includes at least the S-NSSAIs (with values for the  Serving
+  PLMN) associated with the established PDN connections in the Requested NSSAI in RRC Connection
+  Establishment.  2. Step 2 as in clause 4.2.2.2.  3. Step 3 as in clause 4.2.2.2.2 (General
+  Registration), with the following modifications:  If the Registration type is "mobility registration
+  update" and the UE indicates that it is moving from EPC in  step 1 and the AMF is configured to
+  support 5GS-EPS interworking procedure without N26 interface, the AMF  treats this registration
+  request as "initial Registration" and the AMF skips the PDU Session status  synchronization.  NOTE
+  1: The UE operating in single registration mode includes the PDU Session IDs corresponding to the
+  PDN  connections to the PDU Session status.  If the UE has provided a 5G-GUTI mapped from 4G-GUTI in
+  step 1 and the AMF is configured to support 5GS-  EPS interworking procedure without N26 interface,
+  the AMF does not perform steps 4 and 5 in clause 4.2.2.2
+
+
+====================================================================================================
+[q013] (procedural) What steps occur during an Xn-based inter-gNB handover?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.502#4.23.12.8.6 ---
+  Xn based handover with insertion of I-SMF  (page 523-523)
+  The following impact is applicable Xn based handover with insertion of I-SMF in clause 4.23.11.2:  -
+  In step 6, at I-SMF insertion, if EBI(s) have been allocated before but the SMF+PGW-C has not
+  prepared the CN  Tunnel Info for each EPS bearer, the SMF+PGW-C requests the PGW-U+UPF to allocate
+  the CN Tunnel for  each EPS bearer for PDU Session(s). PGW-U+UPF allocates the PGW-U tunnel info for
+  the EPS bearer and  sends it to the SMF+PGW-C.  -  In step 9, the SMF+PGW-C provides also the CN
+  Tunnel Info for each EPS bearer to the I-SMF.
+
+  --- 23.502#4.2.7.2.2 ---
+  Creating NGAP UE-TNLA-bindings during handovers  (page 92-92)
+  During an Xn-based inter NG-RAN node handover, the following applies  -  If an NGAP UE-TNLA-binding
+  exists for a UE, the source 5G-AN node supplies the target 5G-AN node with  the corresponding TNL
+  address of the AMF for the currently used TNL association.  -  If the target 5G-AN does not have a
+  TNL association towards the TNL address of the AMF received from the  source 5G-AN node, the target
+  5G-AN node establishes a TNL association towards the TNL address received  from the source 5G-AN
+  node, creates an NGAP UE-TNLA-binding to this TNL association and sends the N2  Path Switch Request
+  via this TNL association.  -  Otherwise, the target 5G-AN node creates an NGAP UE-TNLA-binding for
+  the UE by selecting a TNL  association from the available TNL associations towards the TNL address,
+  permitted for the initial N2 message  for the AMF identified by the UE's GUAMI.  -  The AMF may
+  decide to use the TNL association selected by the 5G-AN or the AMF may modify the NGAP  UE-TNLA-
+  binding by triangular redirection.  During an inter NG-RAN node handover without Xn interface (i.e.
+  during an N2 handover) the following applies:  -  If an NGAP UE-TNLA-binding exists for a UE, the
+  source 5G-AN node sends the N2 Handover Required  message using the corresponding TNL address of the
+  AMF.  -  Otherwise the 5G-AN node creates an NGAP UE-TNLA-binding for the UE by selecting a TNL
+  association  from the available TNL associations permitted for the initial N2 message for the AMF
+  identified by the UE's  GUAMI.  -  The target AMF selects a TNL association from the available TNL
+  associations for the target 5G-AN node and  sends the N2 Handover Request message via this TNL
+  association. The target 5G-AN node creates an NGAP  UE-TNLA-binding for the UE based on the TNL
+  association selected by the target AMF.
+
+  --- 23.502#4.9.1.2.1 ---
+  General  (page 196-197)
+  Clause 4.9.1.2 includes details regarding the Xn based inter NG-RAN handover with and without UPF
+  re-allocation.  Xn handovers are only supported for intra-AMF mobility. New AMF can be selected by
+  the target NG-RAN node as  specified in clause 5.21.2 of TS 23.501 [2].  The handover preparation
+  and execution phases are performed as specified in TS 38.300 [9], in the case of handover to  a
+  shared network, source NG-RAN determines a PLMN to be used in the target network as specified by TS
+  23.501 [2].  If the serving PLMN changes during Xn-based handover, the source NG-RAN node shall
+  indicate to the target NG-  RAN node (in the Mobility Restriction List) the selected PLMN ID to be
+  used in the target network. During Xn based  handover into a shared NG-RAN node the source NG RAN
+  node shall include the serving NID (if available) in the  Mobility Restriction List to be used by
+  the target NG-RAN node.  NOTE:  When an SNPN is used in the source NG-RAN, the same SNPN is used in
+  the target network.  If the AMF generates the N2 downlink signalling during the ongoing handover and
+  receives a rejection to a N2 interface  procedure (e.g. Location Reporting Control; DL NAS message
+  transfer; etc.) from the NG-RAN with an indication that  a Xn based handover procedure is in
+  progress, the AMF may reattempt the same N2 interface procedure either when the  handover is
+  complete or the handover is deemed to have failed, when possible. The failure is known by expiry of
+  the  timer guarding the N2 interface procedure.  Upon reception for an SMF initiated N1 and/or N2
+  request(s) with an indication that the request has been temporarily  rejected due to handover
+  procedure in progress, the SMF starts a locally configured guard timer. Any NF (e.g. the SMF)
+  should hold any signalling messages targeted towards AMF for a given UE during the handover
+  preparation phase  unless it detects that the handover execution is completed or handover has
+  failed/cancelled. The NF (e.g. the SMF) may  re-attempt, up to a pre-configured number of times,
+  when either it detects that the handover is completed or has failed  using message reception or at
+  expiry of the guard timer.
+
+
+====================================================================================================
+[q017] (procedural) What are the steps involved in UE-triggered PDU session release?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.502#3 ---
+  PDU Session, the SMF triggers the change of SSC mode 3 PDU Session anchor as an independent procedure  (page 67-71)
+  described in clause 4.3.5.2 or clause 4.3.5.3 after accepting the activation of UP of the PDU
+  Session.  The SMF can reject the activation of UP of the PDU Session by including a cause in the
+  Nsmf_PDUSession_UpdateSMContext Response. Following are some of the cases:  -  If the PDU Session
+  corresponds to a LADN and the UE is outside the area of availability of the LADN as  described in
+  step 5b;  -  If the AMF notified the SMF that the UE is reachable only for regulatory prioritized
+  service and the PDU  Session to be activated is not for a regulatory prioritized service; or  -  If
+  the SMF decided to change the PSA UPF for the requested PDU Session as described in step 5b. In this
+  case, after sending Nsmf_PDUSession_UpdateSMContext Response, the SMF triggers another procedure to
+  instruct UE to re-establish the PDU Session as described in clause 4.3.5.1 for SSC mode 2.  -  If
+  the SMF received negative response in Step 6b due to UPF resource unavailability.  If the PDU
+  Session has been assigned any EPS bearer ID, the SMF also includes the mapping between EPS  bearer
+  ID(s) and QFI(s) into the N2 SM information to be sent to the NG-RAN.  The User Plane Security
+  Enforcement information is determined by the SMF upon PDU session establishment as  described in
+  clause 5.10.3 of TS 23.501 [2]. If the User Plane Security Enforcement information indicates that
+  Integrity Protection is "Preferred" or "Required", the SMF also includes the UE Integrity Protection
+  Maximum  Data Rate.  The RSN and PDU Session Pair ID are included when applicable, as determined by
+  the SMF during PDU  Session establishment as described in clause 5.33.2.1 of TS 23.501 [2].  12. AMF
+  to (R)AN: N2 Request (N2 SM information received from SMF, security context, Mobility Restriction
+  List, UE-AMBR, List of UE-Slice-MBR(s) (optional and for 3GPP access type only), MM NAS Service
+  Accept,  list of recommended cells / TAs / NG-RAN node identifiers, UE Radio Capability, Core
+  Network Assistance  Information, Tracing Requirements, UE Radio Capability ID, QMC Configuration
+  information). The Allowed  NSSAI for the Access Type for the UE is included in the N2 message. If
+  the subscription information includes  Tracing Requirements, the AMF includes Tracing Requirements
+  in the N2 Request. If the subscription  information includes QMC Configuration information, the AMF
+  includes QMC Configuration information in the  N2 Request.  If the UE triggered the Service Request
+  while in CM-CONNECTED state, only N2 SM information received  from SMF and MM NAS Service Accept are
+  included in the N2 Request.  If the Service Request procedure is triggered by the Network (as
+  described in clause 4.2.3.3) while the UE is in  CM-CONNECTED state, only N2 SM information received
+  from SMF is included in the N2 Request.  If the Service Request procedure is triggered by the
+  Network (as described in clause 4.2.3.3) while the UE is in  CM-IDLE state, only N2 SM information
+  received from SMF and MM NAS Service Accept is included in the  N2 Request.  For a UE that was in
+  CM-IDLE state when the Service Request was triggered, the NG-RAN stores the Security  Context. If
+  the Service Request is not triggered by UE for a signalling connection only, RAN also stores QoS
+  Information for the QoS Flows of the PDU Sessions that are activated and N3 Tunnel IDs in the UE RAN
+  context and Mobility Restriction List (as described in clause 5.3.4.1 of TS 23.501 [2]).  MM NAS
+  Service Accept includes PDU Session status in AMF. Any local PDU Session Release during the  Session
+  Request procedure is indicated to the UE via the Session Status. PDU Session Reactivation Result is
+  provided in Service Accept for the PDU sessions in the List Of PDU Sessions To Be Activated and the
+  PDU
+
+  --- 23.502#4.3.2.2.2 ---
+  Home-routed Roaming  (page 122-127)
+  This procedure is used in the case of home-routed roaming scenarios.  AMF  H-PCF  UDM  (R)AN  UE
+  3a. Nsmf_PDUSession_CreateSMContext Request  7. Subscription data retrieval/Subscribe  9b. SM Policy
+  Association Establishment or SMF initiated SM  Policy Association Modification  12a. N4 Session
+  Establishment Request  1. PDU Session Establishment Request  V-UPF  V-SMF  12b. N4 Session
+  Establishment Response  13. Nsmf_PDUSession_Create Response  16. RRC reconfiguration  15. N2 PDU
+  Session Request  17. N2 PDU Session Request Ack  18. Nsmf_PDUSession_UpdateSMContext Request  22.
+  IPv6 Address Configuration  First Uplink Data  First Downlink Data  4. UPF  selection  H-UPF  H-SMF
+  Visited PLMN  Home PLMN  6. Nsmf_PDUSession_Create Request  First Downlink Data  10. UPF selection
+  5a. N4 Session Establishment Request  5b. N4 Session Establishment Response  14.
+  Namf_Communication_N1N2MessageTransfer  19a. N4 Session Modification Request  19b. N4 Session
+  Modification Response  20. Nsmf_PDUSession_UpdateSMContext Response  9a. PCF selection  2. SMF
+  Selection  8. PDU Session Authentication/ Authorization  3b. Nsmf_PDUSession_CreateSMContext
+  Response  21. Nsmf_PDUSession_SMContextStatusNotify  11. SMF initiated SM Policy Association
+  Modification  24. Unsubscribe/Deregistration  23. Nsmf_PDUSession_Update Request  12c. Registration
+  13a. N4 Session Modification Request  13b. N4 Session Modification Response  Figure 4.3.2.2.2-1: UE-
+  requested PDU Session Establishment for home-routed roaming scenarios  1. This step is the same as
+  step 1 in clause 4.3.2.2.1.  2. For NR satellite access, the AMF may decide to verify the UE
+  location as described in clause 5.4.11.4 of  TS 23.501 [2].  As in step 2 of clause 4.3.2.2.1 except
+  that, if the UE does not include an S-NSSAI in the PDU Session request,  both a Serving PLMN S-NSSAI
+  (in the Allowed NSSAI) and its corresponding HPLMN S-NSSAI values are  selected by the AMF. Also,
+  the AMF in the serving PLMN selects both an SMF in the Serving PLMN using the  S-NSSAI of the
+  Serving PLMN mapping to the S-NSSAIs of the HPLMN used for the PDU Session, and,  additionally an
+  SMF in the HPLMN using the S-NSSAI of the HPLMN used for the PDU Session, as described  in clause
+  4.3.2.2.3. The AMF may also receive alternative H-SMFs from the NRF. If Control Plane CIoT 5GS
+  Optimisation is enabled for the PDU Session, the AMF selects V-SMF and H-SMF that supports the
+  Control  Plane CIoT 5GS Optimisation (see clause 6.3.2 of TS 23.501 [2]). The AMF stores the
+  association of the S-  NSSAI(s), the DNN, the PDU Session ID, the SMF ID in VPLMN as well as Access
+  Type of the PDU Session.  Whether to perform DNN replacement is based on operator agreement.  In
+  step 3 of clause 4.3.2.2.1, in local breakout roaming case, if V-SMF responds to AMF indicating that
+  V-SMF  is not able to process some part of the N1 SM information, the AMF proceeds with home routed
+  case from this  step and may select an SMF in the VPLMN different from the V-SMF selected earlier.
+  3a. As in step 3 of clause 4.3.2.2.1 with the addition that:  -  the AMF also provides the identity
+  of the H-SMF it has selected in step 2 and both the VPLMN S-NSSAI  from the Allowed NSSAI and the
+  corresponding S-NSSAI of the HPLMN, which is in the mapping the
+
+  --- 23.502#4.3.4.3 ---
+  UE or network requested PDU Session Release for Home-routed Roaming  (page 150-153)
+  This procedure is used in the case of home-routed roaming scenarios.  (R)AN  AMF  V-SMF  H-SMF
+  V-UPF  1a. PDU Session Release Request  1c. SM Policy Asociaton Termination  2a. N4 Session Release
+  Request  2b. N4 Session Release Response  UE  1e. PDU Session Release Trigger  1a.
+  Nsmf_PDUSession_UpdateSMContext Request  5b. Nsmf_PDUSession_UpdateSMContext Response  6. N2
+  Resource Release Request  7. AN-specific resource modification (including PDU Session Release
+  Command / Ack)  8. N2 Resource Release Ack  PCF  H-UPF  1a. Nsmf_PDUSession_Update Request  3a.
+  Nsmf_PDUSession_Update Request  14. Nsmf_PDUSession_Update Response  4a. N4 Session Release Request
+  4b. N4 Session Release Response  9. Nsmf_PDUSession_UpdateSMContext Request  10.
+  Nsmf_PDUSession_UpdateSMContext Response  1a. Nsmf_PDUSession_Update Response  1b.
+  Nsmf_PDUSession_ReleaseSMContext Request  3b. Nsmf_PDUSession_Release Response  5c.
+  Namf_Communication_N1N2MessageTransfer  5a. Nsmf_PDUSession_ReleaseSMContext Response  11. PDU
+  Session Release Accept  12. Nsmf_PDUSession_UpdateSMContext Request  13.
+  Nsmf_PDUSession_UpdateSMContext Response  15a. SM Policy Association Termination  16a
+  Nsmf_PDUSession_StatusNotify  16b  Nsmf_PDUSession_S  MContextStatusNotify  1d. N2 message (PDU
+  session ID, SM information)  1d. Nsmf_PDUSession_UpdateSMContext Request  1d. Nsmf_PDUSession_Update
+  Request  1d. Nsmf_PDUSession_Update Response  1b. Nsmf_PDUSession_Release Request  1f.
+  Nsmf_PDUSession_UpdateSMContext Request  1f. Nsmf_PDUSession_Update Request  1f.
+  Nsmf_PDUSession_Update Response  1a. N4 Session Modification Request/Response  1b. N4 Session
+  Modification Request/Response  1d. N4 Session Modification Request/Response  15b. N4 Session Release
+  Request  15c. N4 Session Release Response  1f. N4 Session Modification Request/Response  1c. N4
+  Session Modification Response/Request  1e. N4 Session Modification Response/Request  15d.
+  Nudm_UECM_Deregistration  UDM  Figure 4.3.4.3-1: UE or network requested PDU Session Release for
+  home-routed roaming  1. The procedure is triggered by one of the following events:  1a. (UE
+  initiated release) As in step 1a of clause 4.3.4.2 with the addition that:  -  the V-SMF initiates
+  N4 Session Modification to instruct the V-UPF to stop forwarding uplink traffic; and  -  the V-SMF
+  invokes the Nsmf_PDUSession_Update Request (SM Context ID, information from the SM  message from the
+  UE e.g. PCO, "Trigger PDU Session Release" indication, Timezone, User Location  Information) service
+  operation to request the H-SMF to release the PDU Session. The H-SMF responds to the  request
+  immediately.  1b. (Serving network initiated release) The serving network initiates the PDU Session
+  Release during UE or  serving network initiated Deregistration procedure as specified in clause
+  4.2.2.3. There is no NAS SM  message between the UE and the V-SMF in this case. This step is the
+  same as step 1c in clause 4.3.4.2, with  the addition that:  -  the V-SMF initiates N4 Session
+  Modification to instruct the V-UPF to stop forwarding uplink traffic; and  -  the V-SMF initiates
+  the release of the PDU Session at the H-SMF by invoking the  Nsmf_PDUSession_Release request.  The
+  serving network also initiates the PDU Session Release where neither N1 nor N2 SM signalling is
+  needed before releasing the SM context as in step 1c in clause 4.3.4.2 if e.g. due to the set of
+  network slices
+
+
+====================================================================================================
+[q021] (comparison) What is the difference between the AMF and the SMF?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.502#4.23.7.2.2 ---
+  Preparation phase  (page 488-488)
+  Compared to the procedure in clause 4.9.1.3.2, the SMF interacting with the S-UPF, T-UPF, S-AMF and
+  T-AMF is the  I-SMF. The difference is following:  -  Step 3: The N14 context exchanged between
+  S-AMF and T-AMF contains the SM Context ID at I-SMF, or SM  Context ID at SMF if I-SMF is not
+  applicable before.  -  Step 4: The T-AMF determines whether Target I-SMF needs to be selected based
+  on UE location and service  area of the SMF. In this case no I-SMF change or removal is needed.  -
+  Step 5: The I-SMF checks whether I-UPF needs to be reallocated, i.e. select a T-UPF.
+
+  --- 23.502#4.23.7.2.3 ---
+  Execution phase  (page 488-488)
+  Compared to the procedure for execution phase in 4.9.1.3.3, the SMF interacting with the S-UPF,
+  T-UPF, S-AMF and  T-AMF is the I-SMF. The difference is as following:  -  Step 10a: If I-SMF is
+  available for a PDU Session and the existing intermediate S-UPF is re-allocated, i.e. a new  T-UPF
+  is selected, the I-SMF invokes an Nsmf_PDUSession_Update Request (DL CN Tunnel Info of the T-  UPF)
+  service operation toward the SMF. The SMF sends N4 Session Modification Request message to PDU
+  Session Anchor UPF, providing DL CN Tunnel Info to the PDU Session Anchor UPF. The PDU Session
+  Anchor  sends one or more "end marker" packets for each N3/N9 tunnel on the old path immediately
+  after switching the  path, the source NG-RAN shall forward the "end marker" packets to the target
+  NG-RAN.  -  Step 10b: The SMF responds with the Nsmf_PDUSession_Update Response service operation to
+  I-SMF once the  PDU Session Anchor UPF is updated with the DL Tunnel Info of the T-UPF.
+
+  --- 23.501#5.6.2 ---
+  Interaction between AMF and SMF  (page 126-128)
+  The AMF and SMF are separate Network Functions.  N1 related interaction with SMF is as follows:  -
+  The single N1 termination point is located in AMF. The AMF forwards SM related NAS information to
+  the SMF  based on the PDU Session ID in the NAS message. Further SM NAS exchanges (e.g. SM NAS
+  message  responses) for N1 NAS signalling received by the AMF over an access (e.g. 3GPP access or
+  non-3GPP access)  are transported over the same access.  -  The serving PLMN ensures that subsequent
+  SM NAS exchanges (e.g. SM NAS message responses) for N1 NAS  signalling received by the AMF over an
+  access (e.g. 3GPP access or non-3GPP access) are transported over the  same access.  -  SMF handles
+  the Session management part of NAS signalling exchanged with the UE.  -  The UE shall only initiate
+  PDU Session Establishment in RM-REGISTERED state.  -  When a SMF has been selected to serve a
+  specific PDU Session, AMF has to ensure that all NAS signalling  related with this PDU Session is
+  handled by the same SMF instance.  -  Upon successful PDU Session Establishment, the AMF and SMF
+  stores the Access Type that the PDU Session is  associated.  N11 related interaction with SMF is as
+  follows:  -  The AMF reports the reachability of the UE based on a subscription from the SMF,
+  including:  -  The UE location information with respect to the area of interest indicated by the
+  SMF.  -  The SMF indicates to AMF when a PDU Session has been released.  -  Upon successful PDU
+  Session Establishment, AMF stores the identification of serving SMF of UE and SMF  stores the
+  identification of serving AMF of UE including the AMF set. When trying to reach the AMF serving  the
+  UE, the SMF may need to apply the behaviour described for "the other CP NFs" in clause 5.21.  N2
+  related interaction with SMF is as follows:  -  Some N2 signalling (such as handover related
+  signalling) may require the action of both AMF and SMF. In such  case, the AMF is responsible to
+  ensure the coordination between AMF and SMF. The AMF may forward the SM  N2 signalling towards the
+  corresponding SMF based on the PDU Session ID in N2 signalling.  -  SMF shall provide PDU Session
+  Type together with PDU Session ID to NG-RAN, in order to facilitate NG-  RAN to apply suitable
+  header compression mechanism to packet of different PDU type. Details refer to  TS 38.413 [34].  N3
+  related interaction with SMF is as follows:  -  Selective activation and deactivation of UP
+  connection of existing PDU Session is defined in clause 5.6.8.  N4 related interaction with SMF is
+  as follows:  -  When it is made aware by the UPF that some DL data has arrived for a UE without
+  downlink N3 tunnel  information, the SMF interacts with the AMF to initiate Network Triggered
+  Service Request procedure. In this  case, if the SMF is aware that the UE is unreachable or if the
+  UE is reachable only for regulatory prioritized  service and the PDU Session is not for regulatory
+  prioritized service, then the SMF shall not inform DL data  notification to the AMF  The AMF is
+  responsible of selecting the SMF per procedures described in clause 6.3.2. For this purpose, it gets
+  subscription data from the UDM that are defined in that clause. Furthermore, it retrieves the
+  subscribed UE-AMBR  from the UDM, and optionally dynamic serving network UE-AMBR from PCF based on
+  operator local policy, and  sends to the (R)AN as defined in clause 5.7.2  AMF-SMF interactions to
+  support LADN are defined in clause 5.6.5.  In order to support charging and to fulfil regulatory
+  requirement (in order to provide NPLI (Network Provided Location  Information) as defined in TS
+  23.228 [15]) related with the set-up, modification and release of IMS Voice calls or with  SMS
+  transfer the following applies  -  At the time of the PDU Session Establishment, the AMF provides
+  the SMF with the PEI of the UE if the PEI is  available at the AMF.  -
+
+CONFIRMED SECTIONS FOR q001 (What is the primary function of the AMF (Access and Mobility Management Function) in the 5G System?):
+  (q001 has no confirmed gold_sections yet — nothing to compare against)
+CONFIRMED SECTIONS FOR q002 (What does the acronym SMF stand for and what is its role in a PDU session?):
+  (q002 has no confirmed gold_sections yet — nothing to compare against)
+
+====================================================================================================
+[q022] (comparison) How does a PDU session differ from a QoS flow?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#5.32.4 ---
+  QoS Support  (page 374-375)
+  can no longer be guaranteed. After the other access accepts the QoS profile, the SMF shall notify
+  the PCF  that GFBR can again be guaranteed. If the other access does not accept the QoS profile, the
+  SMF shall delete  the GBR QoS Flow and report to the PCF about the removal of the PCC rule.  NOTE 1:
+  The ATSSS rule for GBR QoS Flow only allows the UE to steer traffic over a single access so that
+  network knows in which access the UE sends GBR traffic. If the network wants to move GBR QoS Flow
+  to the other access, the network needs to update ATSSS rule of the UE.  When the MA PDU Session is
+  established or when the MA PDU Session is modified, the SMF may provide QoS rule(s)  to the UE via
+  one access, which are applied by the UE as specified in clause 5.7.1.4. The QoS rule(s) provided by
+  SMF  via one access are commonly used for both 3GPP access and non-3GPP access, so the QoS
+  classification is independent  of ATSSS rules.  The derived QoS rule generated by Reflective QoS is
+  applied independently of the access on which the RQI was  received. When the MPTCP functionality is
+  used in the UE, the UE shall use the IP address/prefix of the MA PDU  Session and the final
+  destination address to generate the derived QoS rule.  When MPTCP functionality is enabled for the
+  MA PDU Session:  -  any QoS rules or PDRs that apply to the MA PDU Session IP address/prefix and
+  port also apply to the "link-  specific multipath" addresses/prefixes and ports used by the UE to
+  establish MPTCP subflows over 3GPP and  non-3GPP accesses; and  -  any QoS rules or PDRs that apply
+  to the IP address/prefix and port of the final destination server in DN also  apply to the IP
+  address and port of the MPTCP proxy for corresponding MPTCP subflows that are terminated at  the
+  proxy.  NOTE 2: How these associations are made is left up to the UE and UPF implementations.
+
+  --- 23.501#5.31.19 ---
+  QoS model for NB-IoT  (page 369-369)
+  5GC QoS model described in clause 5.7 applies to NB-IoT with the following requirements:  -  The
+  default QoS rule shall be the only QoS rule of a PDU Session for a UE connected to 5GC via NB-IoT.
+  There  is only one QoS Flow (corresponding to the default QoS rule) per PDU session.  -  Reflective
+  QoS is not supported over NB-IoT.  -  For NB-IoT, there is a 1:1 mapping between the QoS Flow
+  corresponding to the default QoS of a PDU session  and a Data Radio Bearer when user plane resources
+  are active for that PDU session.  -  A maximum of two Data Radio Bearers are supported over NB-IoT.
+  Therefore, at most two PDU sessions can  have active user plane resources at the same time.  -  The
+  capability of multiple UP resource support for NB-IoT UEs is indicated in the UE 5GMM Core Network
+  Capability (see TS 24.501 [47]). During PDU Session Establishment or UP resource activation, the AMF
+  checks  if the UE can support the establishment of user plane resources (See clause 4.2.3.2 and
+  clause 4.3.2.2.1 of  TS 23.502 [3]).
+
+  --- 23.501#5.7.1.1 ---
+  QoS Flow  (page 155-155)
+  The 5G QoS model is based on QoS Flows. The 5G QoS model supports both QoS Flows that require
+  guaranteed flow  bit rate (GBR QoS Flows) and QoS Flows that do not require guaranteed flow bit rate
+  (Non-GBR QoS Flows). The 5G  QoS model also supports Reflective QoS (see clause 5.7.5).  The QoS
+  Flow is the finest granularity of QoS differentiation in the PDU Session. A QoS Flow ID (QFI) is
+  used to  identify a QoS Flow in the 5G System. User Plane traffic with the same QFI within a PDU
+  Session receives the same  traffic forwarding treatment (e.g. scheduling, admission threshold). The
+  QFI is carried in an encapsulation header on N3  (and N9) i.e. without any changes to the e2e packet
+  header. QFI shall be used for all PDU Session Types. The QFI shall  be unique within a PDU Session.
+  The QFI may be dynamically assigned or may be equal to the 5QI (see clause 5.7.2.1).  Within the
+  5GS, a QoS Flow is controlled by the SMF and may be preconfigured, or established via the PDU
+  Session  Establishment procedure (see clause 4.3.2 of TS 23.502 [3]), or the PDU Session
+  Modification procedure (see  clause 4.3.3 of TS 23.502 [3].  Any QoS Flow is characterised by:  -  A
+  QoS profile provided by the SMF to the AN via the AMF over the N2 reference point or preconfigured
+  in the  AN;  -  One or more QoS rule(s) and optionally QoS Flow level QoS parameters (as specified
+  in TS 24.501 [47])  associated with these QoS rule(s) which can be provided by the SMF to the UE via
+  the AMF over the N1  reference point and/or derived by the UE by applying Reflective QoS control;
+  and  -  One or more UL and DL PDR(s) provided by the SMF to the UPF.  Within the 5GS, a QoS Flow
+  associated with the default QoS rule is required to be established for a PDU Session and  remains
+  established throughout the lifetime of the PDU Session. This QoS Flow should be a Non-GBR QoS Flow
+  (further details are described in clause 5.7.2.7).  A QoS Flow is associated with QoS requirements
+  as specified by QoS parameters and QoS characteristics.  NOTE:  The QoS Flow associated with the
+  default QoS rule provides the UE with connectivity throughout the  lifetime of the PDU Session.
+  Possible interworking with EPS motivates the recommendation for this QoS  Flow to be of type Non-
+  GBR.
+
+CONFIRMED SECTIONS FOR q001 (What is the primary function of the AMF (Access and Mobility Management Function) in the 5G System?):
+  (q001 has no confirmed gold_sections yet — nothing to compare against)
+CONFIRMED SECTIONS FOR q002 (What does the acronym SMF stand for and what is its role in a PDU session?):
+  (q002 has no confirmed gold_sections yet — nothing to compare against)
+
+====================================================================================================
+[q025] (comparison) How does the 5G QoS model's flow-based approach differ from the EPS (4G) bearer-based QoS model?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#5.7.1.1 ---
+  QoS Flow  (page 155-155)
+  The 5G QoS model is based on QoS Flows. The 5G QoS model supports both QoS Flows that require
+  guaranteed flow  bit rate (GBR QoS Flows) and QoS Flows that do not require guaranteed flow bit rate
+  (Non-GBR QoS Flows). The 5G  QoS model also supports Reflective QoS (see clause 5.7.5).  The QoS
+  Flow is the finest granularity of QoS differentiation in the PDU Session. A QoS Flow ID (QFI) is
+  used to  identify a QoS Flow in the 5G System. User Plane traffic with the same QFI within a PDU
+  Session receives the same  traffic forwarding treatment (e.g. scheduling, admission threshold). The
+  QFI is carried in an encapsulation header on N3  (and N9) i.e. without any changes to the e2e packet
+  header. QFI shall be used for all PDU Session Types. The QFI shall  be unique within a PDU Session.
+  The QFI may be dynamically assigned or may be equal to the 5QI (see clause 5.7.2.1).  Within the
+  5GS, a QoS Flow is controlled by the SMF and may be preconfigured, or established via the PDU
+  Session  Establishment procedure (see clause 4.3.2 of TS 23.502 [3]), or the PDU Session
+  Modification procedure (see  clause 4.3.3 of TS 23.502 [3].  Any QoS Flow is characterised by:  -  A
+  QoS profile provided by the SMF to the AN via the AMF over the N2 reference point or preconfigured
+  in the  AN;  -  One or more QoS rule(s) and optionally QoS Flow level QoS parameters (as specified
+  in TS 24.501 [47])  associated with these QoS rule(s) which can be provided by the SMF to the UE via
+  the AMF over the N1  reference point and/or derived by the UE by applying Reflective QoS control;
+  and  -  One or more UL and DL PDR(s) provided by the SMF to the UPF.  Within the 5GS, a QoS Flow
+  associated with the default QoS rule is required to be established for a PDU Session and  remains
+  established throughout the lifetime of the PDU Session. This QoS Flow should be a Non-GBR QoS Flow
+  (further details are described in clause 5.7.2.7).  A QoS Flow is associated with QoS requirements
+  as specified by QoS parameters and QoS characteristics.  NOTE:  The QoS Flow associated with the
+  default QoS rule provides the UE with connectivity throughout the  lifetime of the PDU Session.
+  Possible interworking with EPS motivates the recommendation for this QoS  Flow to be of type Non-
+  GBR.
+
+  --- 23.501#5.22.1 ---
+  General  (page 301-301)
+  The 5GS and the 5G QoS model allow classification and differentiation of specific services such as
+  listed in clause 5.16,  based on subscription-related and invocation-related priority mechanisms.
+  These mechanisms provide abilities such as  invoking, modifying, maintaining, and releasing QoS
+  Flows with priority, and delivering QoS Flow packets according  to the QoS characteristics under
+  network congestion conditions.  Subscription-related Priority Mechanisms include the ability to
+  prioritize flows based on subscription information,  including the prioritization of RRC Connection
+  Establishment based on Unified Access Control mechanisms and the  establishment of prioritized QoS
+  Flows.  Invocation-related Priority Mechanisms include the ability for the service layer to
+  request/invoke the activation of  prioritized QoS Flows through an interaction over Rx/N5 and packet
+  detection in the UPF.  QoS Mechanisms applied to established QoS Flows include the ability to fulfil
+  the QoS characteristics of QoS Flows  through preservation of differentiated treatment for
+  prioritized QoS Flow and resource distribution prioritization.  Messages associated with priority
+  services that are exchanged over service-based interfaces may include a Message  Priority header to
+  indicate priority information, as specified in TS 23.502 [3] and TS 29.500 [49].  In addition, the
+  separation of concerns between the service classification provided by the core network through the
+  association of Service Data Flows to QoS, and the enforcing of QoS differentiation in (R)AN through
+  the association of  QoS Flows to Data Radio bearers, supports the prioritization of QoS Flows when a
+  limitation of the available data radio  bearers occurs.  In addition, it also includes the ability
+  for the service layer to provide instructions on how to perform pre-emption of  media flows with the
+  same priority assigned through an interaction over Rx as defined in TS 23.503 [45].
+
+  --- 23.501#5.32.4 ---
+  QoS Support  (page 374-375)
+  can no longer be guaranteed. After the other access accepts the QoS profile, the SMF shall notify
+  the PCF  that GFBR can again be guaranteed. If the other access does not accept the QoS profile, the
+  SMF shall delete  the GBR QoS Flow and report to the PCF about the removal of the PCC rule.  NOTE 1:
+  The ATSSS rule for GBR QoS Flow only allows the UE to steer traffic over a single access so that
+  network knows in which access the UE sends GBR traffic. If the network wants to move GBR QoS Flow
+  to the other access, the network needs to update ATSSS rule of the UE.  When the MA PDU Session is
+  established or when the MA PDU Session is modified, the SMF may provide QoS rule(s)  to the UE via
+  one access, which are applied by the UE as specified in clause 5.7.1.4. The QoS rule(s) provided by
+  SMF  via one access are commonly used for both 3GPP access and non-3GPP access, so the QoS
+  classification is independent  of ATSSS rules.  The derived QoS rule generated by Reflective QoS is
+  applied independently of the access on which the RQI was  received. When the MPTCP functionality is
+  used in the UE, the UE shall use the IP address/prefix of the MA PDU  Session and the final
+  destination address to generate the derived QoS rule.  When MPTCP functionality is enabled for the
+  MA PDU Session:  -  any QoS rules or PDRs that apply to the MA PDU Session IP address/prefix and
+  port also apply to the "link-  specific multipath" addresses/prefixes and ports used by the UE to
+  establish MPTCP subflows over 3GPP and  non-3GPP accesses; and  -  any QoS rules or PDRs that apply
+  to the IP address/prefix and port of the final destination server in DN also  apply to the IP
+  address and port of the MPTCP proxy for corresponding MPTCP subflows that are terminated at  the
+  proxy.  NOTE 2: How these associations are made is left up to the UE and UPF implementations.
+
+
+====================================================================================================
+[q027] (multi_hop) If a UE is served by a new AMF after a mobility registration update, how does that affect the PDU sessions anchored at its SMF and UPF?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#5.34.7.1 ---
+  UE's Mobility Event Management  (page 403-403)
+  When an I-SMF is involved in a PDU Session, the SMF and I-SMF independently subscribe to "UE
+  mobility event  notification" service provided by AMF. The AMF treats the SMF's and I-SMF's
+  subscription separately and notifies the  event directly to the SMF or I-SMF. If the SMF does not
+  know the serving AMF address, the SMF gets the serving  AMF address from the UDM as described in
+  clause 5.2.3.2.4, TS 23.502 [3] and subscribes directly with the serving  AMF.  In the case of AMF
+  change (e.g. Inter NG-RAN node N2 based handover), the target AMF receives mobility event
+  subscription information from the source AMF and updates the mobility event subscription information
+  with the SMF  and I-SMF independently (i.e. target AMF allocates the Subscription Correlation ID for
+  each event and notifies the  respective SMFs and I-SMF as described in clause 5.3.4.4).  In the case
+  of I-SMF change or I-SMF insertion (e.g. at Inter NG-RAN node N2 based handover), the subscription
+  of  mobility event (from AMF) is not transferred from the old I-SMF or SMF to the new I-SMF, the new
+  I-SMF triggers a  new subscription event if the new I-SMF wants to receive the corresponding
+  mobility event. In the case of I-SMF  removal, the subscription of mobility event at the AMF is not
+  transferred from the old I-SMF to the SMF, the SMF  triggers a new subscription event if the SMF
+  wants to receive the corresponding mobility event.  The subscription from the old SMF entity (old
+  I-SMF, SMF) is removed via an explicitly request from this old SMF  entity.
+
+  --- 23.502#4.9.1.2.2 ---
+  Xn based inter NG-RAN handover without User Plane function re-allocation  (page 197-200)
+  This procedure is used to hand over a UE from a source NG-RAN to target NG-RAN using Xn when the AMF
+  is  unchanged and the SMF decides to keep the existing UPF. The UPF referred in this clause
+  4.9.1.2.2 is the UPF which  terminates N3 interface in the 5GC for non-roaming or local breakout
+  roaming scenario, V-UPF which terminates N3  interface in 5GC for home routed roaming scenario. The
+  SMF referred in this clause 4.9.1.2.2 is the V-SMF for home  routed roaming scenario. The presence
+  of IP connectivity between the Source UPF and Target NG-RAN is assumed.  The call flow is shown in
+  figure 4.9.1.2.2-1.  TargetNG-  RAN  Source NG-  RAN  AMF  UE  Handover preparation  UPF(s)
+  Handover Execution  Forwarding of data  1b. N2 Path Switch Request  3. N4 Session  Modification
+  Request  4. N4 Session  Modification Response  Downlink data  5. N3 End marker  5. N3 End marker  7.
+  N2 Path Switch Request Ack  8. Release Resources  SMF(s)  2. Nsmf_PDUSession_UpdatSMContext Request
+  6. Nsmf_PDUSession_UpdatSMContext Response  9. Registration Procedure  1a. RAN Usage data report
+  Figure 4.9.1.2.2-1: Xn based inter NG-RAN handover without UPF re-allocation  1a. If the PLMN has
+  configured secondary RAT usage reporting, the source NG-RAN node during the handover  execution
+  phase may provide RAN usage data Report (N2 SM Information (Secondary RAT usage data),  Handover
+  Flag, Source to Target transparent container) to the AMF. The source NG-RAN node shall provide  this
+  only when the Target NG-RAN has confirmed handover over Xn interface. The Handover Flag indicates to
+  the AMF that it should buffer the N2 SM Information containing the usage data report before
+  forwarding it.  If the source NG RAN and target NG RAN support RACS as defined in TS 23.501 [2], the
+  source NG-RAN  provides the UE's UE Radio Capability ID to the target NG-RAN. If the source NG-RAN
+  has knowledge that the  target NG-RAN might not have a local copy of the Radio Capability
+  corresponding to the UE Radio Capability  ID (i.e. because the source NG-RAN had itself to retrieve
+  the UE's Radio Capability from the AMF) then the  source NG-RAN may also send some or all of the
+  UE's Radio Capability to the target NG-RAN (the size limit  based on local configuration) in Xn
+  signalling as defined in TS 38.423 [72] . In the case of inter-PLMN  handover, when the source and
+  target NG-RAN support RACS as defined in TS 23.501 [2] and the source NG-  RAN determines based on
+  local configuration that the target PLMN does not support the UE Radio Capability  ID assigned by
+  the source PLMN, then the source NG-RAN shall provide the UE radio access capabilities to the
+  target NG-RAN and shall not send the UE Radio Capability ID. If, as permitted in TS 38.423 [72], the
+  target  NG-RAN during the handover preparation received the UE radio access capabilities but did not
+  receive the UE  Radio Capability ID, NG-RAN shall proceed with handover using the received UE radio
+  access capabilities. If  the target NG-RAN received both the UE radio access capabilities and the UE
+  Radio Capability ID, then the  target NG-RAN shall use any locally stored UE radio access capability
+  information corresponding to the UE  Radio Capability ID. If none are stored locally, the target NG-
+  RAN may request the full UE radio access  capability information from the core network. If the full
+  UE radio access capability information is not promptly  received from the core network, or the
+  target NG-RAN chooses not to request them, then the target NG-RAN  shall proceed with the UE radio
+  access capabilities sent by the source NG-RAN. The target NG-RAN shall not  use the UE radio access
+  capability information received from the source NG-RAN for any other UE with the  same the UE Radio
+  Capability ID.
+
+
+====================================================================================================
+[q029] (multi_hop) What is the relationship between S-NSSAI-based network slice selection and AMF/SMF selection during registration?
+----------------------------------------------------------------------------------------------------
+CANDIDATES (full chunk text, read to confirm — not just a score):
+  --- 23.501#5.15.5.3 ---
+  Establishing a PDU Session in a Network Slice  (page 237-238)
+  SMF discovery and selection within the selected Network Slice instance is initiated by the AMF when
+  a SM message to  establish a PDU Session is received from the UE. The appropriate NRF is used to
+  assist the discovery and selection  tasks of the required network functions for the selected Network
+  Slice instance.  The AMF queries the appropriate NRF to select an SMF in a Network Slice instance
+  based on S-NSSAI, DNN, NSI-ID  (if available) and other information e.g. UE subscription and local
+  operator policies, when the UE triggers PDU Session  Establishment. The selected SMF establishes a
+  PDU Session based on S-NSSAI and DNN.  When the AMF belongs to multiple Network Slice instances,
+  based on configuration, the AMF may use an NRF at the  appropriate level for the SMF selection.  For
+  further details on the SMF selection, refer to clause 4.3.2.2.3 of TS 23.502 [3].  When a PDU
+  Session for a given S-NSSAI is established using a specific Network Slice instance, the CN provides
+  to  the (R)AN the S-NSSAI corresponding to this Network Slice instance to enable the RAN to perform
+  access specific  functions.  The UE shall not perform PDU Session handover from one Access Type to
+  another if the S-NSSAI of the PDU Session  is not included in the Allowed NSSAI of the target Access
+  Type.
+
+  --- 23.501#5.15.12.2 ---
+  UE and UE configuration aspects  (page 248-249)
+  A UE may support the subscription-based restrictions to simultaneous registration of network slices
+  feature. In this case,  the UE indicates its support in the Registration Request message in the
+  Initial Registration and the Mobility Registration  Update as part of the UE 5GMM Core Network
+  Capability.  When the serving AMF provides the Configured NSSAI to the UE, and the UE has indicated
+  it supports the  subscription-based restrictions to simultaneous registration of network slices
+  feature, the AMF also provides the UE  with the NSSRG information related to the S-NSSAIs of the
+  HPLMN which are in the mapping information of the  Configured NSSAI. A UE which receives the NSSRG
+  values in the network slicing configuration information shall only  include in the Requested NSSAI
+  S-NSSAIs that share a common NSSRG as per the received information. If the UE has  stored Pending
+  NSSAI and the UE is still interested in the Pending NSSAI then all the S-NSSAIs in the Requested
+  NSSAI and the Pending S-NSSAI shall share a common NSSRG. If the HPLMN changes NSSRG information in
+  the  subscription information for a UE, the UDM updates the supporting AMF serving the UE with the
+  new NSSRG  information and the AMF, possibly after interaction with the NSSF (see clause 5.2.16.2.1
+  of TS 23.502 [3]), updates the  UE as necessary with network slicing configuration by means of the
+  UE Configuration Update procedure (this may  include changes in the Configured NSSAI (and related
+  mapping information) and changes in the Allowed NSSAI as  applicable). The UE acknowledges this UE
+  Configuration Update according to clause 4.2.4.2 of TS 23.502 [3].  At any time, a UE supporting
+  subscription-based restrictions to simultaneous registration of network slices feature and  that has
+  received NSSRG information together with the Configured NSSAI shall only request S-NSSAIs, across
+  all  Access Type(s) regardless of whether the same PLMN or different PLMNs are used, that share one
+  or more common  NSSRG.  NOTE:  In Requested NSSAI across all Access Type(s), the UE needs to include
+  S-NSSAIs that share at least one  common NSSRG.  An AMF which supports the subscription-based
+  restrictions to simultaneous registration of network slice feature  configures a non-supporting UE
+  with a Configured NSSAI including only the S-NSSAIs sharing all the NSSRG values  of the default
+  S-NSSAI(s), except if it has been instructed otherwise by the UDM. In addition to the default S-
+  NSSAI(s), the AMF sends to the UE in the Configured NSSAI any other subscribed S-NSSAI whose NSSRG
+  match at  least those defined for the default S-NSSAI(s).  The UDM in a supporting HPLMN may
+  optionally keep a record of the PEIs or Type Allocation Codes values  regarding UE ability to handle
+  network slices that cannot be provided simultaneously in Allowed NSSAI.  The UDM may, based on
+  configuration or the optional PEI records, indicate the AMF to provide the non-supporting  UEs with
+  the full set of subscribed S-NSSAIs even if they do not share a common NSSRG. The UDM instructs the
+  supporting AMFs of a PLMN to do so by indicating that the UE can be given a Configured NSSAI with
+  all the S-  NSSAIs in the subscription information. If this indication is received from the UDM by
+  the AMF, this is included in the  UE context.  Based on its policy (including configuration or
+  optionally checking the specific PEI or Type Allocation Code used by  the UE, and subject to roaming
+  agreement) the UDM may also provide the serving AMF in a non-supporting VPLMN  with all the S-NSSAI
+  in the subscription information. In this case the AMF provides the UE with a Configured NSSAI
+  including all the S-NSSAIs in the subscription information the AMF receives.  The AMF provides no
+  NSSRG information to a non-supporting UE.  When an AMF which supports the subscription-based
+  restrictions to simultaneous registration of network slice feature,  receives from a UE a Requested
+  NSSAI including S-NSSAIs that are supported in the Tracking Area but do not share a
+
+  --- 23.502#4.3.2.2.3.2 ---
+  Non-roaming and roaming with local breakout  (page 127-128)
+  AMF  NRF  3. Nnrf_NFDiscovery_Request  4. Nnrf_NFDiscovery_Request response  1.
+  Nnssf_NSSelection_Get  Serving PLMN  NSSF  2. Nnssf_NSSelection_Get response  Figure 4.3.2.2.3.2-1:
+  SMF selection for non-roaming and roaming with local breakout scenarios  This procedure may be
+  skipped altogether if SMF information is available in the AMF by other means (e.g. locally
+  configured); otherwise:  -  when the serving AMF is aware of the appropriate NRF to be used to
+  select NFs/services within the  corresponding Network Slice instance based on configuration or based
+  on the Network Slice selection  information received during Registration, only steps 3 and 4 in the
+  following procedure are executed as  described in Figure 4.3.2.2.3.2-1;  -  when the serving AMF is
+  not aware of the appropriate NRF to be used to select NFs/services within the  corresponding Network
+  Slice instance, all steps in the following procedure are executed as described in Figure
+  4.3.2.2.3.2-1.  1. The AMF invokes the Nnssf_NSSelection_Get service operation from the NSSF in
+  serving PLMN with the S-  NSSAI of the Serving PLMN from the Allowed NSSAI requested by the UE, PLMN
+  ID of the SUPI, TAI of the  UE and the indication that the request is within a procedure of PDU
+  Session establishment in either the non-  roaming or roaming with local breakout scenario.  2. The
+  NSSF in serving PLMN selects the Network Slice instance, determines and returns the appropriate NRF
+  to  be used to select NFs/services within the selected Network Slice instance and optionally may
+  return a NSI ID  corresponding to the Network Slice instance.  3. AMF queries the appropriate NRF in
+  serving PLMN by issuing the Nnrf_NFDiscovery_Request including at  least the S-NSSAI of the Serving
+  PLMN for this PDU Session from the Allowed NSSAI, PLMN ID of the SUPI,  DNN and possibly NSI ID if
+  the AMF has stored an NSI ID for the S-NSSAI of the Serving PLMN for this PDU  Session from the
+  Allowed NSSAI.  NOTE:  The list of parameters for SMF selection is defined in clause 6.3.2 of TS
+  23.501 [2]. See also  clause 5.34.3 of TS 23.501 [2] for I-SMF selection.  4. The NRF in serving
+  PLMN provides to the AMF, e.g. FQDN or IP address, of a set of the discovered SMF  instance(s) or
+  Endpoint Address(es) of SMF service instance(s) in Nnrf_NFDiscovery_Request response  message and
+  possibly an NSI ID for the selected Network Slice instance corresponding to the S-NSSAI for
+  subsequent NRF queries.
+

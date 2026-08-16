@@ -29,5 +29,17 @@ google-generativeai==0.8.3
 
 # Evaluation
 ragas==0.1.20
+datasets==4.0.0
+# Only used for its GoogleGenerativeAIEmbeddings class (Answer Relevance
+# needs an embedding model) — see backend/evaluation/ragas_runner.py.
+# NOT used for LLM generation: ChatGoogleGenerativeAI from this package
+# calls the underlying google-generativeai client with a `temperature`
+# kwarg that this project's pinned google-generativeai==0.8.3 rejects
+# (confirmed live: TypeError: generate_content() got an unexpected keyword
+# argument 'temperature'). ragas_runner.py works around this with a small
+# direct google-generativeai wrapper (_DirectGeminiRagasLLM) instead.
+# Pinned to the 1.x line because ragas==0.1.20 requires langchain-core<0.3,
+# which rules out langchain-google-genai>=2.0 (needs langchain-core>=0.3).
+langchain-google-genai==1.0.10
 pytest==8.3.3
 pytest-asyncio==0.24.0

@@ -160,6 +160,12 @@ class ChatRequest(BaseModel):
     question: str = Field(min_length=1, max_length=settings.max_question_length)
     release: str | None = None
     top_k: int | None = Field(default=None, ge=1, le=20)
+    # Eval-tooling only: an evaluation/dataset.json question id (e.g. "q001"),
+    # stamped onto the resulting Query row so evaluation code can join back
+    # to that dataset entry's ground_truth without matching on question
+    # text. Never set by the real product frontend. See
+    # evaluation/seed_eval_queries.py and backend/evaluation/ragas_dataset.py.
+    question_id: str | None = Field(default=None, max_length=16)
 
 
 class ChatSourceOut(BaseModel):
@@ -186,6 +192,11 @@ class ChatResponse(BaseModel):
     sources: list[ChatSourceOut]
     retrieval: RetrievalMeta
     grounding_verdict: str | None
+    # TRD §8: deterministic, code-level flag (backend.retrieval.release_conflict)
+    # set whenever the final chunk set spans more than one release for the
+    # same spec — auditable independent of whether the model's own prose
+    # actually calls out the conflict.
+    release_conflict_detected: bool
     latency_ms: int
 
 
@@ -202,6 +213,26 @@ class VariantMetricsOut(BaseModel):
 
 
 class EvalRunResponse(BaseModel):
-    question_count: int
-    variants: list[VariantMetricsOut]
-    ablation_table_markdown: str
+    """GET /api/v1/eval/run's response. Scores whatever has actually been
+    seeded into the `queries` table (see evaluation/seed_eval_queries.py)
+    against evaluation/dataset.json's ground_truth answers — it does not
+    run the pipeline live, so hitting this endpoint is cheap-ish (LLM calls
+    are bounded by how many questions were already seeded, not by a fresh
+    45-question generation pass). For the 3-variant basic/hybrid/full
+    ablation, see evaluation/run_ablation.py and GET /api/v1/eval/ablation.
+    """
+
+    timestamp: str
+    total_dataset_questions: int
+    scored_question_count: int
+    partial: bool
+    citation_correctness_rate: float | None
+    hallucination_rate: float | None
+    precision_at_5: float | None
+    recall_at_5: float | None
+    mrr: float | None
+    precision_scored_question_count: int
+    faithfulness: float | None
+    answer_relevance: float | None
+    context_relevance: float | None
+    message: str

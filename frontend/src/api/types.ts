@@ -28,6 +28,7 @@ export interface ChatResponse {
   sources: ChatSource[]
   retrieval: RetrievalMeta
   grounding_verdict: string | null
+  release_conflict_detected: boolean
   latency_ms: number
 }
 
@@ -99,6 +100,43 @@ export interface TokenResponse {
   access_token: string
   token_type: string
   user: UserOut
+}
+
+export interface EvalRunResponse {
+  timestamp: string
+  total_dataset_questions: number
+  scored_question_count: number
+  partial: boolean
+  citation_correctness_rate: number | null
+  hallucination_rate: number | null
+  precision_at_5: number | null
+  recall_at_5: number | null
+  mrr: number | null
+  precision_scored_question_count: number
+  faithfulness: number | null
+  answer_relevance: number | null
+  context_relevance: number | null
+  message: string
+}
+
+export interface AblationVariantResult {
+  variant_name: string
+  question_count: number
+  answered_count: number
+  hallucination_rate: number | null
+  faithfulness: number | null
+  faithfulness_note: string | null
+  faithfulness_scored_count: number
+  recall_at_5: number | null
+  recall_scored_count: number
+  recall_note: string | null
+}
+
+export interface AblationResults {
+  timestamp: string
+  question_count: number
+  partial: boolean
+  variants: AblationVariantResult[]
 }
 
 export class ApiError extends Error {

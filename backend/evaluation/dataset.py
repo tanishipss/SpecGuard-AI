@@ -20,6 +20,7 @@ def load_dataset(path: Path | None = None) -> list[EvalQuestion]:
             release=q.get("release"),
             expected_refusal=q["expected_refusal"],
             gold_sections=q.get("gold_sections", []),
+            ground_truth=q.get("ground_truth"),
         )
         for q in data["questions"]
     ]

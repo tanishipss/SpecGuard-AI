@@ -37,3 +37,4 @@ class GenerationResult:
     grounding_verdict: str | None
     refusal_reason: str | None = None
     llm_latency_ms: int = 0
+    release_conflict_detected: bool = False

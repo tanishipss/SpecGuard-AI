@@ -14,7 +14,12 @@ INSUFFICIENT_EVIDENCE_MESSAGE = (
 )
 
 
-def _refusal(reason: str, message: str = INSUFFICIENT_EVIDENCE_MESSAGE, llm_latency_ms: int = 0) -> GenerationResult:
+def _refusal(
+    reason: str,
+    message: str = INSUFFICIENT_EVIDENCE_MESSAGE,
+    llm_latency_ms: int = 0,
+    release_conflict_detected: bool = False,
+) -> GenerationResult:
     return GenerationResult(
         answer=message,
         grounded=False,
@@ -23,6 +28,7 @@ def _refusal(reason: str, message: str = INSUFFICIENT_EVIDENCE_MESSAGE, llm_late
         grounding_verdict=None,
         refusal_reason=reason,
         llm_latency_ms=llm_latency_ms,
+        release_conflict_detected=release_conflict_detected,
     )
 
 
@@ -52,13 +58,18 @@ def generate_answer(retrieval_result: RetrievalResult, llm_client: LLMClient | N
     the model's own refusal, failed citation validation, or failed
     grounding — never returns an ungrounded or uncited factual answer.
     """
+    release_conflict_detected = retrieval_result.release_conflict.detected
+
     if not retrieval_result.evidence.sufficient:
-        return _refusal(f"evidence gate: {retrieval_result.evidence.reason}")
+        return _refusal(
+            f"evidence gate: {retrieval_result.evidence.reason}",
+            release_conflict_detected=release_conflict_detected,
+        )
 
     client = llm_client or get_default_client()
     chunks = retrieval_result.chunks
 
-    system_prompt = build_system_prompt(chunks, retrieval_result.query)
+    system_prompt = build_system_prompt(chunks, retrieval_result.query, retrieval_result.release_conflict)
     generation_start = time.perf_counter()
     answer = client.generate(system_prompt, retrieval_result.query).strip()
     llm_latency_ms = int((time.perf_counter() - generation_start) * 1000)
@@ -68,17 +79,23 @@ def generate_answer(retrieval_result: RetrievalResult, llm_client: LLMClient | N
             "model declined: context did not support an answer",
             message=REFUSAL_TEXT,
             llm_latency_ms=llm_latency_ms,
+            release_conflict_detected=release_conflict_detected,
         )
 
     citation_validation = validate_citations(answer, chunks)
     if not citation_validation.valid:
-        return _refusal(f"citation validation failed: {citation_validation.reason}", llm_latency_ms=llm_latency_ms)
+        return _refusal(
+            f"citation validation failed: {citation_validation.reason}",
+            llm_latency_ms=llm_latency_ms,
+            release_conflict_detected=release_conflict_detected,
+        )
 
     grounding_verdict = check_grounding(client, answer, chunks)
     if grounding_verdict.verdict != "pass":
         return _refusal(
             f"grounding validator failed: unsupported claims {grounding_verdict.unsupported_claims}",
             llm_latency_ms=llm_latency_ms,
+            release_conflict_detected=release_conflict_detected,
         )
 
     return GenerationResult(
@@ -88,4 +105,5 @@ def generate_answer(retrieval_result: RetrievalResult, llm_client: LLMClient | N
         sources=_resolve_sources(citation_validation.cited_ids, chunks),
         grounding_verdict="pass",
         llm_latency_ms=llm_latency_ms,
+        release_conflict_detected=release_conflict_detected,
     )

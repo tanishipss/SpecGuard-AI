@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-08-16T19:06:32.270320+00:00",
+  "question_count": 1,
+  "partial": true,
+  "variants": [
+    {
+      "variant_name": "basic_rag",
+      "question_count": 1,
+      "answered_count": 1,
+      "hallucination_rate": 0.0,
+      "faithfulness": 1.0,
+      "faithfulness_note": null,
+      "faithfulness_scored_count": 1,
+      "recall_at_5": null,
+      "recall_scored_count": 0,
+      "recall_note": "Recall@5 not computed: no scored question had gold_sections populated (see dataset.json's gold_sections_convention)."
+    },
+    {
+      "variant_name": "hybrid_rerank",
+      "question_count": 1,
+      "answered_count": 1,
+      "hallucination_rate": 0.0,
+      "faithfulness": 1.0,
+      "faithfulness_note": null,
+      "faithfulness_scored_count": 1,
+      "recall_at_5": null,
+      "recall_scored_count": 0,
+      "recall_note": "Recall@5 not computed: no scored question had gold_sections populated (see dataset.json's gold_sections_convention)."
+    },
+    {
+      "variant_name": "full_system",
+      "question_count": 1,
+      "answered_count": 1,
+      "hallucination_rate": 0.0,
+      "faithfulness": 0.875,
+      "faithfulness_note": null,
+      "faithfulness_scored_count": 1,
+      "recall_at_5": null,
+      "recall_scored_count": 0,
+      "recall_note": "Recall@5 not computed: no scored question had gold_sections populated (see dataset.json's gold_sections_convention)."
+    }
+  ]
+}

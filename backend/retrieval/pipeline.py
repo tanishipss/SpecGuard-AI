@@ -7,6 +7,7 @@ from backend.embedding import embed_query
 from backend.retrieval import evidence_gate
 from backend.retrieval.dense import dense_search
 from backend.retrieval.fusion import reciprocal_rank_fusion
+from backend.retrieval.release_conflict import detect_release_conflict
 from backend.retrieval.reranker import rerank
 from backend.retrieval.schemas import RetrievalResult
 from backend.retrieval.sparse import sparse_search
@@ -48,11 +49,13 @@ def retrieve(
 
     signals = evidence_gate.compute_signals(query, reranked)
     decision = evidence_gate.decide(signals)
+    release_conflict = detect_release_conflict(reranked)
 
     return RetrievalResult(
         query=query,
         chunks=reranked,
         evidence=decision,
+        release_conflict=release_conflict,
         dense_candidate_count=len(dense_results),
         sparse_candidate_count=len(sparse_results),
         fused_candidate_count=len(fused),

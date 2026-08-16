@@ -87,6 +87,11 @@ class Query(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     question: Mapped[str] = mapped_column(Text, nullable=False)
+    # evaluation/dataset.json question id (e.g. "q001"), set only when this
+    # query was seeded by evaluation/seed_eval_queries.py rather than typed
+    # by a real user — lets eval code join back to ground_truth by id
+    # instead of matching on question text. Null for real product traffic.
+    dataset_question_id: Mapped[str | None] = mapped_column(String(16), nullable=True, index=True)
     retrieved_chunk_ids: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False, default=list)
     rerank_scores: Mapped[list[float]] = mapped_column(ARRAY(Float), nullable=False, default=list)
     evidence_sufficient: Mapped[bool] = mapped_column(nullable=False)

@@ -18,7 +18,7 @@ This version combines the original TRD with the strongest additions found in the
 | Sparse retrieval | PostgreSQL full-text search (tsvector + GIN) | Handles exact identifiers ("N2 interface", "5QI") that embeddings can miss |
 | Fusion | Reciprocal Rank Fusion, `k=60` initially, tune after eval | Simple, robust, no blend-weight tuning needed |
 | Reranking | Cross-Encoder (`sentence-transformers`, e.g. `ms-marco-MiniLM-L-6-v2`) on fused top-20 | Jointly scores (query, chunk) pairs — more precise than bi-encoder alone |
-| LLM | `gemini-2.5-flash` | Fast, cheap, strong instruction-following |
+| LLM | `gemini-flash-lite-latest` | Fast, cheap, strong instruction-following — configured lighter than the originally-specified `gemini-2.5-flash` for cost/latency reasons given the pipeline's multiple LLM calls per question (generation + grounding validator); see ADR-9 |
 | Grounding validator | Independent second LLM call (or NLI model) checking claim-level entailment | **Kept from v1** — this is the layer the second doc package under-specifies; do not drop it |
 | Backend | FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, httpx, pytest | Typed, async, testable |
 | Frontend | React + TypeScript + Vite + Tailwind + TanStack Query + React Markdown (fallback: Streamlit) | |
@@ -68,7 +68,7 @@ This version combines the original TRD with the strongest additions found in the
               ┌────────────────┴────────────────┐
           Sufficient                        Insufficient
               ▼                                    ▼
-   Gemini 2.5 Flash                          Refusal Response
+   Gemini Flash Lite                          Refusal Response
 (context-only prompt, cite SRC-IDs
  only, retrieved docs = data not
  instructions)
@@ -313,3 +313,4 @@ ANSWER:
 - **ADR-6:** Independent grounding validator as a second, separate model call — a generator is a poor judge of its own hallucinations; this is kept even though it's absent from some competing designs, because it is the most defensible answer to "how do you know it's not hallucinating."
 - **ADR-7:** PostgreSQL + pgvector over a dedicated vector DB — one operational database is sufficient at this corpus size and simplifies the 4-day build.
 - **ADR-8:** Release as first-class metadata with explicit conflict surfacing, not silent merging — correctness matters more than a clean-looking single answer.
+- **ADR-9:** `gemini-flash-lite-latest` over `gemini-2.5-flash` — lower cost/latency given the pipeline's multiple LLM calls per question (generation + grounding validator, plus evaluation's hallucination judge and Ragas metrics); revisit if lite-model grounding judgments prove less reliable than the full flash model.

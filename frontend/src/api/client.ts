@@ -1,10 +1,12 @@
 import {
   ApiError,
+  type AblationResults,
   type ChatRequest,
   type ChatResponse,
   type DocumentDetail,
   type DocumentOut,
   type DocumentSearchResult,
+  type EvalRunResponse,
   type LoginRequest,
   type SignupRequest,
   type TokenResponse,
@@ -80,4 +82,21 @@ export function fetchMe(): Promise<UserOut> {
 
 export function updateProfile(body: UpdateProfileRequest): Promise<UserOut> {
   return request<UserOut>('/auth/me', { method: 'PATCH', body: JSON.stringify(body) })
+}
+
+export function fetchEvalRun(): Promise<EvalRunResponse> {
+  return request<EvalRunResponse>('/eval/run')
+}
+
+// Ablation genuinely may not exist yet (run_ablation.py hasn't been run) —
+// the backend reports that as a 404, and this returns null for it rather
+// than throwing, so the caller can render an honest "not yet run" state
+// instead of an error.
+export async function fetchEvalAblation(): Promise<AblationResults | null> {
+  try {
+    return await request<AblationResults>('/eval/ablation')
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) return null
+    throw err
+  }
 }

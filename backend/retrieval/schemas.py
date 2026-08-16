@@ -41,10 +41,17 @@ class EvidenceDecision:
 
 
 @dataclass
+class ReleaseConflict:
+    detected: bool
+    conflicting_specs: dict[str, set[str]]
+
+
+@dataclass
 class RetrievalResult:
     query: str
     chunks: list[RetrievedChunk]
     evidence: EvidenceDecision
+    release_conflict: ReleaseConflict
     dense_candidate_count: int
     sparse_candidate_count: int
     fused_candidate_count: int

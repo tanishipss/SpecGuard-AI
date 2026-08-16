@@ -28,7 +28,7 @@ def chat(request: Request, chat_request: ChatRequest, db: Session = Depends(get_
 
     latency_ms = int((time.perf_counter() - start) * 1000)
 
-    _log_query(db, retrieval_result, generation_result, latency_ms)
+    _log_query(db, retrieval_result, generation_result, latency_ms, chat_request.question_id)
     log_chat_request(
         request_id=request_id,
         query=retrieval_result.query,
@@ -56,15 +56,23 @@ def chat(request: Request, chat_request: ChatRequest, db: Session = Depends(get_
             final_context=len(retrieval_result.chunks),
         ),
         grounding_verdict=generation_result.grounding_verdict,
+        release_conflict_detected=generation_result.release_conflict_detected,
         latency_ms=latency_ms,
     )
 
 
-def _log_query(db: Session, retrieval_result, generation_result, latency_ms: int) -> None:
+def _log_query(
+    db: Session,
+    retrieval_result,
+    generation_result,
+    latency_ms: int,
+    dataset_question_id: str | None = None,
+) -> None:
     db.add(
         Query(
             id=uuid.uuid4(),
             question=retrieval_result.query,
+            dataset_question_id=dataset_question_id,
             retrieved_chunk_ids=[c.chunk_id for c in retrieval_result.chunks],
             rerank_scores=[c.rerank_score or 0.0 for c in retrieval_result.chunks],
             evidence_sufficient=retrieval_result.evidence.sufficient,

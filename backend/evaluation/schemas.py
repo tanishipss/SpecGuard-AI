@@ -16,6 +16,11 @@ class EvalQuestion:
     # "_meta" block for the convention. Retrieval metrics for a question
     # are skipped (not counted as zero) while this is empty.
     gold_sections: list[str] = field(default_factory=list)
+    # Reference answer used for Ragas generation metrics (Faithfulness,
+    # Answer Relevance, Context Relevance) — see dataset.json's
+    # "ground_truth_convention". None for older dataset entries that
+    # predate this field.
+    ground_truth: str | None = None
 
 
 @dataclass

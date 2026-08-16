@@ -1,0 +1,454 @@
+<title>Gold Sections Review</title>
+<style>
+  :root{
+    --paper:#f6f7fa;
+    --paper-raised:#ffffff;
+    --ink:#1a2032;
+    --ink-soft:#4a5268;
+    --muted:#8991a6;
+    --border:#dde1ea;
+    --accent:#3457a6;
+    --accent-soft:#eaeffb;
+    --flag:#a5651f;
+    --flag-soft:#faf1e4;
+    --flag-border:#e8c896;
+    --mono: ui-monospace, 'SFMono-Regular', 'IBM Plex Mono', Consolas, Menlo, monospace;
+    --sans: 'Segoe UI', ui-sans-serif, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){}
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#12151d;
+      --paper-raised:#181c27;
+      --ink:#e8eaf0;
+      --ink-soft:#aab0c2;
+      --muted:#727c93;
+      --border:#2a3040;
+      --accent:#7f9ce0;
+      --accent-soft:#1c2740;
+      --flag:#e0a95f;
+      --flag-soft:#332510;
+      --flag-border:#4d3a1c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12151d;
+    --paper-raised:#181c27;
+    --ink:#e8eaf0;
+    --ink-soft:#aab0c2;
+    --muted:#727c93;
+    --border:#2a3040;
+    --accent:#7f9ce0;
+    --accent-soft:#1c2740;
+    --flag:#e0a95f;
+    --flag-soft:#332510;
+    --flag-border:#4d3a1c;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 28px 96px;
+  }
+
+  header.doc-head{
+    border-bottom:1px solid var(--border);
+    padding-bottom:28px;
+    margin-bottom:36px;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent);
+    display:inline-block;
+  }
+  h1{
+    font-size:32px;
+    letter-spacing:-0.02em;
+    margin:0 0 12px;
+    text-wrap:balance;
+    font-weight:650;
+  }
+  .lede{
+    color:var(--ink-soft);
+    font-size:15.5px;
+    max-width:64ch;
+    margin:0 0 18px;
+  }
+  .lede code, td code{
+    font-family:var(--mono);
+    font-size:0.92em;
+    background:var(--accent-soft);
+    color:var(--accent);
+    padding:1px 5px;
+    border-radius:4px;
+  }
+  .status-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+  }
+  .stat{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    background:var(--paper-raised);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:8px 12px;
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+  }
+  .stat b{
+    color:var(--ink);
+    font-size:15px;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat.flag-stat b{ color:var(--flag); }
+
+  .ask{
+    background:var(--accent-soft);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    border-radius:8px;
+    padding:14px 18px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin-bottom:44px;
+  }
+  .ask strong{ color:var(--ink); }
+
+  section.category{
+    margin-bottom:48px;
+  }
+  .cat-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:14px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+  }
+  .cat-head h2{
+    font-size:19px;
+    margin:0;
+    font-weight:650;
+    letter-spacing:-0.01em;
+  }
+  .cat-range{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.02em;
+  }
+
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--paper-raised);
+  }
+  table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:760px;
+    font-size:13.5px;
+  }
+  thead th{
+    text-align:left;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding:11px 16px;
+    border-bottom:1px solid var(--border);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+    color:var(--ink-soft);
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr:hover{ background:var(--accent-soft); }
+  td.id{
+    font-family:var(--mono);
+    color:var(--ink);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  td.question{ color:var(--ink); max-width:220px; }
+  td.candidates{
+    font-family:var(--mono);
+    font-size:12.3px;
+    color:var(--muted);
+    max-width:280px;
+  }
+  td.candidates .best{ color:var(--ink-soft); font-weight:600; }
+  td.pick{ font-family:var(--mono); font-size:12.8px; white-space:nowrap; }
+  .pick-val{
+    color:var(--accent);
+    font-weight:600;
+  }
+  .flag-inline{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--flag);
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:12.8px;
+  }
+  .flag-inline::before{ content:"⚑"; }
+  tr.is-flagged td.pick{ background:var(--flag-soft); }
+  .note{
+    display:block;
+    font-family:var(--sans);
+    color:var(--muted);
+    font-size:11.8px;
+    margin-top:3px;
+    font-weight:400;
+  }
+
+  .flagged-panel{
+    background:var(--flag-soft);
+    border:1px solid var(--flag-border);
+    border-radius:10px;
+    padding:22px 24px;
+    margin-bottom:44px;
+  }
+  .flagged-panel h2{
+    margin:0 0 8px;
+    font-size:17px;
+    color:var(--flag);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .flagged-panel p{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin:0 0 14px;
+    max-width:68ch;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family:var(--mono);
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--flag);
+    background:var(--paper-raised);
+    border:1px solid var(--flag-border);
+    padding:5px 11px;
+    border-radius:6px;
+  }
+
+  .oos-panel{
+    background:var(--paper-raised);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px 24px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+  }
+  .oos-panel .count{
+    font-family:var(--mono);
+    font-size:30px;
+    font-weight:700;
+    color:var(--ink);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .oos-panel .count-label{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .oos-panel p{
+    margin:0;
+    font-size:14px;
+    color:var(--ink-soft);
+    max-width:56ch;
+  }
+  .oos-panel code{
+    font-family:var(--mono);
+    background:var(--accent-soft);
+    color:var(--accent);
+    padding:1px 5px;
+    border-radius:4px;
+  }
+
+  footer{
+    margin-top:12px;
+    padding-top:20px;
+    border-top:1px solid var(--border);
+    font-size:12.5px;
+    color:var(--muted);
+    font-family:var(--mono);
+  }
+
+  @media (max-width:640px){
+    .page{ padding:36px 16px 72px; }
+    h1{ font-size:26px; }
+    .cat-head{ flex-direction:column; align-items:flex-start; gap:4px; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="doc-head">
+    <p class="eyebrow">SpecGuard AI · evaluation/dataset.json</p>
+    <h1>Gold sections review</h1>
+    <p class="lede">Retrieval candidates for the 30 factual / procedural / comparison / multi-hop questions needing a <code>gold_sections</code> field, pulled through the real pipeline (dense + sparse + RRF + reranking) against the live corpus. No LLM calls were used to produce this — <strong>nothing has been written to <code>dataset.json</code> yet.</strong></p>
+    <div class="status-row">
+      <span class="stat"><b>30</b> reviewed</span>
+      <span class="stat"><b>18</b> confident picks</span>
+      <span class="stat flag-stat"><b>12</b> flagged for your call</span>
+      <span class="stat"><b>15</b> out-of-scope · <code style="font-family:var(--mono);font-size:12px;">[]</code> by design</span>
+    </div>
+  </header>
+
+  <div class="ask">
+    <strong>What I need from you:</strong> confirm or correct each proposed pick below, and rule directly on the 12 flagged rows — I did not guess on those. Nothing is finalized until you've reviewed this pass.
+  </div>
+
+  <section class="category">
+    <div class="cat-head">
+      <h2>Factual</h2>
+      <span class="cat-range">q001 – q010</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Top candidates (section · score)</th><th>Proposed gold_sections</th></tr></thead>
+        <tbody>
+          <tr><td class="id">q001</td><td class="question">Primary function of the AMF</td><td class="candidates"><span class="best">23.502#4.2.1</span> 6.28 · 23.501#4.2.2 6.15 · 23.503#6.2.8 6.11</td><td class="pick"><span class="pick-val">["23.502#4.2.1"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q002</td><td class="question">SMF acronym + role in PDU session</td><td class="candidates">23.502#5.2.8.2.9 3.96 · 23.501#5.15.5.3 3.93 · 23.501#5.34.3 3.74</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">scores too close to separate a winner</span></td></tr>
+          <tr><td class="id">q003</td><td class="question">What is a PDU Session</td><td class="candidates"><span class="best">23.501#5.6.9.1</span> 7.35 · 23.501#5.6.13 5.63 · 23.501#5.27.0 5.38</td><td class="pick"><span class="pick-val">["23.501#5.6.9.1"]</span></td></tr>
+          <tr><td class="id">q004</td><td class="question">Purpose of 5QI</td><td class="candidates"><span class="best">23.501#5.7.4</span> 5.52 · 23.501#5.7.3.1 5.04 · 23.501#5.9.1 4.79</td><td class="pick"><span class="pick-val">["23.501#5.7.4"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q005</td><td class="question">Network slicing</td><td class="candidates">23.501#4.1 4.15 · 23.501#4.2.2 3.42 · 23.501#5.15.8 3.23</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">low absolute scores across the board</span></td></tr>
+          <tr><td class="id">q006</td><td class="question">Role of UPF</td><td class="candidates"><span class="best">23.501#6.2.3</span> 5.32 · 23.501#5.8.1 4.86 · 23.501#5.8.2.14 4.36</td><td class="pick"><span class="pick-val">["23.501#6.2.3"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q007</td><td class="question">N2 reference point</td><td class="candidates">23.501#4.2.8.3.1 3.95 · 23.501#4.4.2.2 3.73 · 23.501#4.2.8.5.4 3.72</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">no clear top hit</span></td></tr>
+          <tr><td class="id">q008</td><td class="question">UDM responsibilities</td><td class="candidates"><span class="best">23.501#6.2.7</span> 6.72 · 23.501#6.2.11 5.89 · 23.503#6.2.4 2.58</td><td class="pick"><span class="pick-val">["23.501#6.2.7"]</span></td></tr>
+          <tr><td class="id">q009</td><td class="question">PCF responsibilities</td><td class="candidates"><span class="best">23.503#6.1.3.1</span> 8.68 · 23.503#5.2.1 6.81 · 23.501#4.2.2 5.45</td><td class="pick"><span class="pick-val">["23.503#6.1.3.1"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q010</td><td class="question">S-NSSAI</td><td class="candidates">23.501#5.15.2.1 5.08 · 23.501#5.19.7.4 4.14 · 23.502#5.2.3.3.1 3.86</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">definition may span more than one clause</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <h2>Procedural</h2>
+      <span class="cat-range">q011 – q020</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Top candidates (section · score)</th><th>Proposed gold_sections</th></tr></thead>
+        <tbody>
+          <tr class="is-flagged"><td class="id">q011</td><td class="question">UE registration steps</td><td class="candidates">23.502#4.11.1.3.3 4.47 · 23.502#4.23.13.3 4.45 · 23.502#4.11.2.3 4.39</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">three near-tied procedure variants</span></td></tr>
+          <tr><td class="id">q012</td><td class="question">PDU session establishment (UE/AMF/SMF)</td><td class="candidates"><span class="best">23.502#4.4.1.2</span> 7.75 · 23.502#4.9.2.4.1 7.14 · 23.502#4.22.2.2.1 7.04</td><td class="pick"><span class="pick-val">["23.502#4.4.1.2"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q013</td><td class="question">Xn-based inter-gNB handover</td><td class="candidates">23.502#4.23.12.8.6 4.77 · 23.502#4.2.7.2.2 4.28 · 23.502#4.9.1.2.1 4.24</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">scores too close to separate a winner</span></td></tr>
+          <tr><td class="id">q014</td><td class="question">QoS flow binding during PDU establishment</td><td class="candidates"><span class="best">23.503#6.1.3.2.4</span> 8.09 · 23.501#5.7.1.4 6.10 · 23.502#4.11.1.1 5.87</td><td class="pick"><span class="pick-val">["23.503#6.1.3.2.4"]</span></td></tr>
+          <tr><td class="id">q015</td><td class="question">AMF re-allocation during initial registration</td><td class="candidates"><span class="best">23.502#4.2.2.2.3</span> 8.37 · 23.502#4.16.1.1 7.06 · 23.502#4.11.1.3.4 6.37</td><td class="pick"><span class="pick-val">["23.502#4.2.2.2.3"]</span></td></tr>
+          <tr><td class="id">q016</td><td class="question">Service request for idle-mode UE</td><td class="candidates"><span class="best">23.502#4.2.3.1</span> 7.25 · 23.502#4.2.3.2 7.15 · 23.501#5.3.3.2.2 6.48</td><td class="pick"><span class="pick-val">["23.502#4.2.3.1", "23.502#4.2.3.2"]</span><span class="note">adjacent clauses, likely both relevant</span></td></tr>
+          <tr class="is-flagged"><td class="id">q017</td><td class="question">UE-triggered PDU session release</td><td class="candidates">23.502#3 6.71 (looks like TOC) · 23.502#4.3.2.2.2 6.44 · 23.502#4.3.4.3 6.43</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">top hit suspected TOC/definitions, not content</span></td></tr>
+          <tr><td class="id">q018</td><td class="question">SMF selects UPF</td><td class="candidates"><span class="best">23.502#4.23.2</span> 8.16 · 23.501#6.3.3.1 7.86 · 23.501#5.16.3.11 7.35</td><td class="pick"><span class="pick-val">["23.502#4.23.2", "23.501#6.3.3.1"]</span></td></tr>
+          <tr><td class="id">q019</td><td class="question">Network-initiated deregistration</td><td class="candidates"><span class="best">23.502#4.2.2.3.1</span> 7.78 · 23.502#4.2.2.3.3 7.11 · 23.502#4.12.3 6.36</td><td class="pick"><span class="pick-val">["23.502#4.2.2.3.1"]</span></td></tr>
+          <tr><td class="id">q020</td><td class="question">AMF paging for CM-IDLE UE</td><td class="candidates"><span class="best">23.501#5.4.3.1</span> 7.82 · 23.502#4.2.3.2 7.60 · 23.502#4.2.3.3 7.45</td><td class="pick"><span class="pick-val">["23.501#5.4.3.1"]</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <h2>Comparison</h2>
+      <span class="cat-range">q021 – q025</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Top candidates (section · score)</th><th>Proposed gold_sections</th></tr></thead>
+        <tbody>
+          <tr class="is-flagged"><td class="id">q021</td><td class="question">AMF vs SMF difference</td><td class="candidates">23.502#4.23.7.2.2 5.51 · 23.502#4.23.7.2.3 4.87 · 23.501#5.6.2 3.86</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">may just be q001 + q002's sections combined</span></td></tr>
+          <tr class="is-flagged"><td class="id">q022</td><td class="question">PDU session vs QoS flow</td><td class="candidates">23.501#5.32.4 6.82 · 23.501#5.31.19 4.80 · 23.501#5.7.1.1 4.79</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">no clean single-clause answer</span></td></tr>
+          <tr><td class="id">q023</td><td class="question">Non-roaming vs home-routed roaming</td><td class="candidates"><span class="best">23.501#4.2.8.1</span> 4.64 · 23.501#4.3.3.2 4.64 · 23.501#4.2.8.2.1 4.32</td><td class="pick"><span class="pick-val">["23.501#4.2.8.1", "23.501#4.3.3.2"]</span></td></tr>
+          <tr><td class="id">q024</td><td class="question">CM-IDLE vs CM-CONNECTED</td><td class="candidates"><span class="best">23.501#5.3.3.2.1</span> 7.82 · 23.501#5.3.3.4 5.30 · 23.501#5.3.3.2.3 4.00</td><td class="pick"><span class="pick-val">["23.501#5.3.3.2.1"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q025</td><td class="question">5G flow-based QoS vs EPS bearer-based</td><td class="candidates">23.501#5.7.1.1 5.96 · 23.501#5.22.1 4.69 · 23.501#5.32.4 4.17</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">EPS-side detail may not be in this corpus at all</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <h2>Multi-hop</h2>
+      <span class="cat-range">q026 – q030</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Question</th><th>Top candidates (section · score)</th><th>Proposed gold_sections</th></tr></thead>
+        <tbody>
+          <tr><td class="id">q026</td><td class="question">5QI → QoS flow → UPF enforcement</td><td class="candidates"><span class="best">23.503#6.2.2.1</span> 5.69 · 23.503#6.1.3.6 4.78 · 23.501#5.7.2.7 3.82</td><td class="pick"><span class="pick-val">["23.503#6.2.2.1", "23.503#6.1.3.6"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q027</td><td class="question">New AMF → effect on SMF/UPF-anchored sessions</td><td class="candidates">23.501#5.34.7.1 5.44 · 23.502#4.9.1.2.2 5.26 (dup hit)</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">candidate set looked degenerate (repeat hit)</span></td></tr>
+          <tr><td class="id">q028</td><td class="question">PCC rules → QoS enforcement at UPF</td><td class="candidates"><span class="best">23.503#6.2.2.1</span> 5.34 · 23.503#6.3.2 4.02 · 23.503#6.2.1.1.1 3.80</td><td class="pick"><span class="pick-val">["23.503#6.2.2.1", "23.503#6.3.2"]</span></td></tr>
+          <tr class="is-flagged"><td class="id">q029</td><td class="question">S-NSSAI slice selection → AMF/SMF selection</td><td class="candidates">23.501#5.15.5.3 5.72 · 23.501#5.15.12.2 5.21 · 23.502#4.3.2.2.3.2 5.03</td><td class="pick"><span class="flag-inline">needs your call</span><span class="note">spans selection logic across two specs</span></td></tr>
+          <tr><td class="id">q030</td><td class="question">SSC mode → UPF reallocation</td><td class="candidates"><span class="best">23.501#5.6.9.2.1</span> 6.34 · 23.502#4.3.5.3 5.44 · 23.501#5.6.9.1 5.43</td><td class="pick"><span class="pick-val">["23.501#5.6.9.2.1", "23.501#5.6.9.1"]</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flagged-panel">
+    <h2>Flagged — needs your judgment</h2>
+    <p>These 12 didn't get a proposed pick: the reranker's top hits were too close to call, one looked like a table-of-contents/definitions hit rather than substantive content, or the question is a comparison/multi-hop type where no single retrieved chunk obviously constitutes "the" answer. Resolve these by reading the source clause directly, not by taking the top retrieval score on faith — that's the exact circularity this dataset exists to avoid.</p>
+    <div class="chip-row">
+      <span class="chip">q002</span><span class="chip">q005</span><span class="chip">q007</span><span class="chip">q010</span>
+      <span class="chip">q011</span><span class="chip">q013</span><span class="chip">q017</span><span class="chip">q021</span>
+      <span class="chip">q022</span><span class="chip">q025</span><span class="chip">q027</span><span class="chip">q029</span>
+    </div>
+  </section>
+
+  <section class="oos-panel">
+    <div>
+      <div class="count">15</div>
+      <div class="count-label">q031–q045</div>
+    </div>
+    <p>Out-of-scope and adversarial questions get <code>"gold_sections": []</code> by design — no chunk should correctly answer these, so there's nothing to confirm here.</p>
+  </section>
+
+  <footer>
+    generated from live retrieve() output · no LLM calls · dataset.json untouched pending your review
+  </footer>
+
+</div>
