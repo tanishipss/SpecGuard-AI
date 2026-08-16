@@ -10,14 +10,15 @@ export function ReleaseSelector({ value, onChange }: Props) {
   const releases = Array.from(new Set(documents?.map((d) => d.release) ?? [])).sort()
 
   return (
-    <label className="flex items-center gap-2 text-sm text-slate-400">
-      Release
+    <label className="flex items-center gap-2 text-sm text-ink-muted">
+      <span className="sr-only">Release</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-slate-100 focus:border-sky-500 focus:outline-none"
+        aria-label="Release"
+        className="h-9 rounded-[10px] border border-border-strong bg-surface px-3 text-[12.5px] font-medium text-ink-muted focus:border-forest focus:outline focus:outline-2 focus:outline-sage-soft"
       >
-        <option value="">Any (default ingested release)</option>
+        <option value="">Release 17</option>
         {releases.map((release) => (
           <option key={release} value={release}>
             {release}

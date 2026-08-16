@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy.orm import Session
 
 from backend.evaluation.generation_metrics import aggregate_generation_metrics, citation_correct, judge_hallucination
@@ -5,6 +7,8 @@ from backend.evaluation.retrieval_metrics import aggregate_retrieval_metrics, ch
 from backend.evaluation.schemas import EvalCaseResult, EvalQuestion, EvalRunResult
 from backend.evaluation.variants import VARIANTS
 from backend.generation.llm_client import LLMClient
+
+logger = logging.getLogger(__name__)
 
 # Recall@5 / Precision@5 / MRR are reported at a fixed k regardless of a
 # variant's own top_k, so numbers are comparable across the ablation rows.
@@ -16,8 +20,16 @@ def run_variant(db: Session, client: LLMClient, questions: list[EvalQuestion], v
     cases: list[EvalCaseResult] = []
     scored_pairs: list[tuple[list[str], list[str]]] = []
 
-    for question in questions:
+    for i, question in enumerate(questions, start=1):
         output = variant_fn(db, client, question)
+        logger.info(
+            "[%s] %d/%d %s refused=%s",
+            variant_name,
+            i,
+            len(questions),
+            question.id,
+            output.refused,
+        )
         retrieved_keys = [chunk_gold_key(c.spec_number, c.section) for c in output.chunks]
 
         if output.refused:

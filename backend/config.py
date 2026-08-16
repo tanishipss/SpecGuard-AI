@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     database_url_async: str = "postgresql+asyncpg://specguard:specguard@localhost:5432/specguard"
 
     google_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-flash-lite-latest"
 
     embedding_model: str = "BAAI/bge-large-en-v1.5"
     embedding_dim: int = 1024
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     dense_top_k: int = 20
     sparse_top_k: int = 20
     rrf_k: int = 60
-    fusion_pool_size: int = 20
+    fusion_pool_size: int = 30
     rerank_top_k: int = 8
 
     # Evidence gate thresholds (TRD §7.1). These are placeholders, not
@@ -42,6 +42,12 @@ class Settings(BaseSettings):
     max_question_length: int = 2000
     rate_limit_chat: str = "20/minute"
     rate_limit_eval: str = "2/minute"
+
+    # Auth (signup/login/session) — separate concern from the RAG pipeline;
+    # does not affect retrieval, generation, or evidence gating.
+    jwt_secret_key: str = "dev-only-insecure-secret-change-me"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 1440
 
 
 settings = Settings()

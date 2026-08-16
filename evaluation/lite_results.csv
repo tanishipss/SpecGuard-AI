@@ -1,0 +1,11 @@
+id,category,refused,expected_refusal,refusal_correct,citation_valid,hallucinated,recall_at_5,mrr,latency_s
+l01,factual,False,False,True,True,False,1.0,0.2,24.66
+l02,architecture,False,False,True,True,False,,,25.39
+l03,procedure,True,False,False,,,0.0,0.0,22.74
+l04,technical_parameter,False,False,True,True,False,1.0,1.0,13.72
+l05,section_specific,True,False,False,,,0.0,0.0,11.28
+l06,terminology,False,False,True,True,True,0.0,0.0,16.42
+l07,multi_hop,False,False,True,True,False,1.0,0.5,18.15
+l08,ambiguous,True,True,True,,,,,12.05
+l09,answerable,True,False,False,,,1.0,0.2,72.3
+l10,out_of_corpus,True,True,True,,,,,11.21

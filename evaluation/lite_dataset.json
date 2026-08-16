@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "description": "Lightweight 10-question eval for demo purposes (deadline-day scope reduction from the full 45-question x 3-variant ablation). Runs only the full production pipeline, not the ablation. gold_sections were verified against the real ingested corpus (not guessed) via direct DB queries.",
+    "convention": "gold_sections use '{spec_number}#{section}' keys, same as evaluation/dataset.json."
+  },
+  "questions": [
+    { "id": "l01", "category": "factual", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#6.2.1"],
+      "question": "What is the primary function of the AMF (Access and Mobility Management Function) in the 5G System?" },
+
+    { "id": "l02", "category": "architecture", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": [],
+      "question": "Describe the high-level 5G System architecture and the main network functions involved." },
+
+    { "id": "l03", "category": "procedure", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.502#4.2.2.2.2"],
+      "question": "What are the high-level steps of the UE registration procedure in the 5G System?" },
+
+    { "id": "l04", "category": "technical_parameter", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#5.7.1.2", "23.501#5.7.1.1"],
+      "question": "What is the purpose of the 5QI (5G QoS Identifier) and how does it relate to the QoS profile of a QoS Flow?" },
+
+    { "id": "l05", "category": "section_specific", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#6.2.2"],
+      "question": "According to clause 6.2.2 of TS 23.501, what functionality does the SMF include?" },
+
+    { "id": "l06", "category": "terminology", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#5.15.2"],
+      "question": "What does the abbreviation S-NSSAI stand for and what is it used for?" },
+
+    { "id": "l07", "category": "multi_hop", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#5.6.2"],
+      "question": "How do the AMF and SMF interact with each other to support a PDU Session?" },
+
+    { "id": "l08", "category": "ambiguous", "release": "Rel-17", "expected_refusal": true,
+      "gold_sections": [],
+      "question": "What is the session?" },
+
+    { "id": "l09", "category": "answerable", "release": "Rel-17", "expected_refusal": false,
+      "gold_sections": ["23.501#5.6.1"],
+      "question": "What is a PDU Session in the 5G System architecture?" },
+
+    { "id": "l10", "category": "out_of_corpus", "release": "Rel-17", "expected_refusal": true,
+      "gold_sections": [],
+      "question": "What is the maximum cell radius supported by 4G LTE X2-based handover, and what is the capital of France?" }
+  ]
+}

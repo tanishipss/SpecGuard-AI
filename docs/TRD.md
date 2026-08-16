@@ -23,7 +23,7 @@ This version combines the original TRD with the strongest additions found in the
 | Backend | FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, httpx, pytest | Typed, async, testable |
 | Frontend | React + TypeScript + Vite + Tailwind + TanStack Query + React Markdown (fallback: Streamlit) | |
 | Evaluation | Ragas + custom hallucination/citation scripts + pytest | |
-| Infra | Docker, Docker Compose, GitHub Actions | |
+| Infra | Neon (cloud PostgreSQL + pgvector), local uvicorn/vite dev servers | No Docker/CI — dev machine has no Docker; cloud Postgres removes the need for a containerized DB |
 
 **Architecture style:** modular monolith (ingestion / retrieval / generation / evaluation / api as separate internal modules, one deployable service) — simpler to ship and demo in 4 days than microservices, while keeping clean boundaries for the interview to probe.
 
@@ -277,7 +277,6 @@ ANSWER:
 - **Performance:** batch embeddings at ingestion, cache them, HNSW for dense search, cap reranking candidate set, async I/O, DB connection pooling, stream LLM output only after evidence is selected (never stream a guess before the gate passes).
 - **Observability:** log `request_id, query, retrieval_latency_ms, reranking_latency_ms, llm_latency_ms, total_latency_ms, candidate_count, final_context_count, grounded, refused, model, spec_filter, release_filter`. Never log API keys, secrets, or PII.
 - **Security:** secrets in env vars, server-side-only LLM calls, CORS restricted to frontend origin, rate limiting, input length limits, prompt-injection defense (treat retrieved text as data, not instructions — §6 rule 5), no arbitrary external URL fetching.
-- **CI/CD:** lint → type check → unit tests → integration tests → frontend build → Docker build → deploy only after all pass.
 
 ---
 
@@ -299,7 +298,6 @@ ANSWER:
 ├── docs/{PRD.md, TRD.md, WORKFLOW.md, adr/}
 ├── .env.example
 ├── requirements.txt
-├── docker-compose.yml
 └── README.md
 ```
 

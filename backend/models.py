@@ -68,6 +68,20 @@ class Chunk(Base):
     )
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    # User-provided display identity — deliberately separate from email.
+    # Nullable for accounts created before this field existed; the frontend
+    # prompts a one-time "complete your profile" flow for those instead of
+    # ever deriving a name from the email address.
+    full_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
 class Query(Base):
     __tablename__ = "queries"
 

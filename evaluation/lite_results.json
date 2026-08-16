@@ -1,0 +1,272 @@
+{
+  "summary": {
+    "question_count": 10,
+    "total_wall_time_s": 117.3,
+    "refusal_accuracy": 0.7,
+    "citation_correctness_rate": 1.0,
+    "hallucination_rate": 0.2,
+    "avg_recall_at_5": 0.5714285714285714,
+    "avg_mrr": 0.2714285714285714,
+    "scored_question_count": 7
+  },
+  "cases": [
+    {
+      "id": "l01",
+      "category": "factual",
+      "question": "What is the primary function of the AMF (Access and Mobility Management Function) in the 5G System?",
+      "expected_refusal": false,
+      "refused": false,
+      "refusal_correct": true,
+      "answer": "Based on the provided documentation, the Access and Mobility Management Function (AMF) includes the following primary functions and functionalities:\n\n* **Connection Management:** Used to establish and release the Control Plane signalling connection between the UE and the AMF [SRC-001]. In AMF functionality descriptions, this includes connection management and dedicated CM management contexts for connectivity over non-3GPP access [SRC-005].\n* **Registration Management:** Used to register or deregister a UE/user with the 5GS and establish the user context in the 5GS [SRC-001]. AMF functionalities also include registration management and co-ordinated RM management context valid over a 3GPP access and a Non-3GPP access [SRC-005].\n* **Mobility Management:** Used to keep track of the current location of a UE [SRC-001]. AMF functionalities include mobility management, management of mobility states for a UE connected via 3GPP and/or non-3GPP accesses, and UE mobility event notifications [SRC-005].\n* **Policy-Related Functionalities:** Enforcement of access and mobility related policies received from the PCF, transfers of UE policy information received from the PCF to the UE via the N1 interface, and reporting of events to the PCF that the PCF has subscribed to [SRC-003].\n* **Additional Core Network and Interface Functions:** \n  - Termination of the RAN CP interface (N2) and NAS (N1), along with NAS ciphering and integrity protection [SRC-005].\n  - Reachability management and Access Authentication/Authorization [SRC-005].\n  - Lawful intercept, security anchor functionality (SEAF), and transport for SM, SMS, and Location Services messages [SRC-005].\n  - Support for charging, network slice-specific authentication and authorization, CIoT 5GS optimisations, Disaster Roaming, and monitoring in roaming scenarios [SRC-005].",
+      "retrieved_keys": [
+        "23.502#4.2.1",
+        "23.501#4.2.2",
+        "23.503#6.2.8",
+        "23.503#5.2.1",
+        "23.501#6.2.1",
+        "23.503#4.2.1",
+        "23.501#4.1",
+        "23.501#4.2.1"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 1.0,
+        "precision_at_5": 0.2,
+        "mrr": 0.2
+      },
+      "citation_valid": true,
+      "hallucinated": false,
+      "latency_s": 24.66
+    },
+    {
+      "id": "l02",
+      "category": "architecture",
+      "question": "Describe the high-level 5G System architecture and the main network functions involved.",
+      "expected_refusal": false,
+      "refused": false,
+      "refusal_correct": true,
+      "answer": "Based on the provided 3GPP documentation, the high-level 5G System architecture is defined as service-based, and interactions between network functions are represented in two ways [SRC-001]:\n- **A service-based representation:** Where network functions (such as the AMF) within the Control Plane enable other authorized network functions to access their services, including point-to-point reference points where necessary [SRC-001]. Control Plane network functions shall only use service-based interfaces for their interactions [SRC-001].\n- **A reference point representation:** Showing the interactions existing between NF services in network functions described by point-to-point reference points (such as N11) between any two network functions (such as AMF and SMF) [SRC-001].\n\nKey principles and concepts of the 5G System architecture include:\n- Separation of User Plane (UP) functions from Control Plane (CP) functions for independent scalability, evolution, and flexible deployments [SRC-003].\n- Modularized function design to enable flexible and efficient network slicing [SRC-003].\n- Defining procedures as services wherever applicable to enable re-use [SRC-003].\n- Enabling Network Functions and their services to interact directly (Direct Communication) or indirectly via a Service Communication Proxy (SCP) (Indirect Communication) [SRC-001, SRC-003].\n- Minimizing dependencies between the Access Network (AN) and the Core Network (CN) via a converged core network with a common AN-CN interface that integrates different access types (e.g., 3GPP and non-3GPP access) [SRC-003].\n- Supporting a unified authentication framework [SRC-003].\n- Supporting \"stateless\" NFs where compute resources are decoupled from storage resources [SRC-003].\n- Supporting capability exposure, concurrent local and centralized services, and roaming with both home-routed and local breakout traffic [SRC-003].\n\nThe 5G System architecture consists of the following Network Functions (NF) and entities:\n\n**Network Functions (NF):**\n- Authentication Server Function (AUSF) [SRC-002]\n- Access and Mobility Management Function (AMF) [SRC-002]\n- Data Network (DN) (e.g., operator services, Internet access, or 3rd party services) [SRC-002]\n- Unstructured Data Storage Function (UDSF) [SRC-002]\n- Network Exposure Function (NEF) [SRC-002]\n- Network Repository Function (NRF) [SRC-002]\n- Network Slice Admission Control Function (NSACF) [SRC-002]\n- Network Slice-specific and SNPN Authentication and Authorization Function (NSSAAF) [SRC-002]\n- Network Slice Selection Function (NSSF) [SRC-002]\n- Policy Control Function (PCF) [SRC-002]\n- Session Management Function (SMF) [SRC-002]\n- Unified Data Management (UDM) [SRC-002]\n- Unified Data Repository (UDR) [SRC-002]\n- User Plane Function (UPF) [SRC-002]\n- UE radio Capability Management Function (UCMF) [SRC-002]\n- Application Function (AF) [SRC-002]\n- User Equipment (UE) [SRC-002]\n- (Radio) Access Network ((R)AN) [SRC-002]\n- 5G-Equipment Identity Register (5G-EIR) [SRC-002]\n- Network Data Analytics Function (NWDAF) [SRC-002]\n- CHarging Function (CHF) [SRC-002]\n- Time Sensitive Networking AF (TSN AF) [SRC-002]\n- Time Sensitive Communication and Time Synchronization Function (TSCTSF) [SRC-002]\n- Data Collection Coordination Function (DCCF) [SRC-002]\n- Analytics Data Repository Function (ADRF) [SRC-002]\n- Messaging Framework Adaptor Function (MFAF) [SRC-002]\n- Non-Seamless WLAN Offload Function (NSWOF) [SRC-002]\n- Edge Application Server Discovery Function (EASDF) [SRC-002]\n\n**Network Entities:**\n- Service Communication Proxy (SCP) [SRC-002]\n- Security Edge Protection Proxy (SEPP) [SRC-002]\n- Non-3GPP InterWorking Function (N3IWF) [SRC-002]\n- Trusted Non-3GPP Gateway Function (TNGF) [SRC-002]\n- Wireline Access Gateway Function (W-AGF) [SRC-002]\n- Trusted WLAN Interworking Function (TWIF) [SRC-002]",
+      "retrieved_keys": [
+        "23.501#4.2.1",
+        "23.501#4.2.2",
+        "23.501#4.1",
+        "23.503#1",
+        "23.502#1",
+        "23.501#4.2.8.5.2",
+        "23.503#5.1",
+        "23.501#5.10.1"
+      ],
+      "retrieval_metrics": null,
+      "citation_valid": true,
+      "hallucinated": false,
+      "latency_s": 25.39
+    },
+    {
+      "id": "l03",
+      "category": "procedure",
+      "question": "What are the high-level steps of the UE registration procedure in the 5G System?",
+      "expected_refusal": false,
+      "refused": true,
+      "refusal_correct": false,
+      "answer": "The available 3GPP documentation does not contain sufficient information to answer this question.",
+      "retrieved_keys": [
+        "23.502#4.11.2.3",
+        "23.502#4.11.5.2",
+        "23.502#4.2.2.1",
+        "23.502#4.2.1",
+        "23.502#4.23.13.3",
+        "23.502#4.12.2.1",
+        "23.501#5.17.2.2.2",
+        "23.501#5.31.3"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 0.0,
+        "precision_at_5": 0.0,
+        "mrr": 0.0
+      },
+      "citation_valid": null,
+      "hallucinated": null,
+      "latency_s": 22.74
+    },
+    {
+      "id": "l04",
+      "category": "technical_parameter",
+      "question": "What is the purpose of the 5QI (5G QoS Identifier) and how does it relate to the QoS profile of a QoS Flow?",
+      "expected_refusal": false,
+      "refused": false,
+      "refusal_correct": true,
+      "answer": "Based on the provided 3GPP documentation, the purpose of the 5QI (5G QoS Identifier) and its relation to the QoS profile of a QoS Flow are as follows:\n\n* **Purpose and Usage of 5QI:** \n  * A QFI may be equal to the 5QI [SRC-001].\n  * Standardized 5QI values are specified for frequently used services to benefit from optimized signalling by using standardized QoS characteristics [SRC-003].\n  * Dynamically assigned 5QI values require the signalling of QoS characteristics as part of the QoS profile and can be used for services where standardized 5QI values are not defined [SRC-003, SRC-004].\n  * Standardized or pre-configured 5QI values indicate standardized or pre-configured 5G QoS characteristics without needing to signal them on any interface (unless certain characteristics are specifically modified) [SRC-006].\n\n* **Relation to the QoS Profile:**\n  * For each QoS Flow, the QoS profile shall include the 5G QoS Identifier (5QI) and the Allocation and Retention Priority (ARP) [SRC-004].\n  * The usage of a dynamically assigned 5QI for a QoS Flow requires the additional signalling of the complete 5G QoS characteristics as part of the QoS profile [SRC-004].\n  * When a standardized or pre-configured 5QI is used, some of the 5G QoS characteristics may also be signalled as part of the QoS profile [SRC-004].",
+      "retrieved_keys": [
+        "23.501#5.7.1.1",
+        "23.501#5.22.1",
+        "23.501#5.7.4",
+        "23.501#5.7.1.2",
+        "23.501#5.7.3.1",
+        "23.501#5",
+        "23.501#5.7.3.3",
+        "23.501#5.27.3"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 1.0,
+        "precision_at_5": 0.4,
+        "mrr": 1.0
+      },
+      "citation_valid": true,
+      "hallucinated": false,
+      "latency_s": 13.72
+    },
+    {
+      "id": "l05",
+      "category": "section_specific",
+      "question": "According to clause 6.2.2 of TS 23.501, what functionality does the SMF include?",
+      "expected_refusal": false,
+      "refused": true,
+      "refusal_correct": false,
+      "answer": "The available 3GPP documentation does not contain sufficient information to answer this question.",
+      "retrieved_keys": [
+        "23.502#4.3.2.2.3.1",
+        "23.503#6.2.2.7",
+        "23.501#6.3.2",
+        "23.502#4.3.2.2.1",
+        "23.501#6.2.16",
+        "23.501#5.17.1.3",
+        "23.501#6.2.27",
+        "23.501#6.2.1"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 0.0,
+        "precision_at_5": 0.0,
+        "mrr": 0.0
+      },
+      "citation_valid": null,
+      "hallucinated": null,
+      "latency_s": 11.28
+    },
+    {
+      "id": "l06",
+      "category": "terminology",
+      "question": "What does the abbreviation S-NSSAI stand for and what is it used for?",
+      "expected_refusal": false,
+      "refused": false,
+      "refusal_correct": true,
+      "answer": "Based on the provided 3GPP documentation:\n\n* **What it stands for:** The abbreviation S-NSSAI stands for **Single Network Slice Selection Assistance Information** (implied by the definition \"An S-NSSAI identifies a Network Slice\" [SRC-001]). \n* **What it is used for:** An S-NSSAI is used to identify a Network Slice [SRC-001].",
+      "retrieved_keys": [
+        "23.501#5.15.2.1",
+        "23.502#5.2.3.3.1",
+        "23.501#5.19.7.4",
+        "23.501#5.3.4.3.1",
+        "23.501#5.15.6",
+        "23.501#5.15.5.2.1",
+        "23.501#5.15.5.2.1",
+        "23.502#4.15.3.2.10"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 0.0,
+        "precision_at_5": 0.0,
+        "mrr": 0.0
+      },
+      "citation_valid": true,
+      "hallucinated": true,
+      "latency_s": 16.42
+    },
+    {
+      "id": "l07",
+      "category": "multi_hop",
+      "question": "How do the AMF and SMF interact with each other to support a PDU Session?",
+      "expected_refusal": false,
+      "refused": false,
+      "refusal_correct": true,
+      "answer": "Based on the provided 3GPP documentation, the interaction between the AMF and SMF to support a PDU Session includes the following:\n\n* **AMF-SMF Association and Context Creation:** \n  * When creating an association with an SMF or I-SMF for a PDU Session, the AMF implicitly subscribes to the SMF/I-SMF for events related to the PDU Session (providing relevant notification information), which is implicitly released when the association is removed [SRC-001].\n  * When the AMF has no association with an SMF to support a PDU Session, it creates the association via the `Nsmf_PDUSession_CreateSMContext` operation, which creates a context identified by the SM Context ID [SRC-004]. The required inputs for this operation include SUPI or PEI, DNN, AMF ID, RAT Type, and Serving Network [SRC-007].\n  * For subsequent interactions (such as handovers between 3GPP and non-3GPP access), the AMF uses the `Nsmf_PDUSession_UpdateSMContext` operation [SRC-004]. \n  * When a SMF is selected to serve a specific PDU Session, the AMF must ensure all NAS signalling related to that session is handled by the same SMF instance [SRC-002].\n\n* **N1 Related Interaction:**\n  * The single N1 termination point is located in the AMF, which forwards SM-related NAS information to the SMF based on the PDU Session ID in the NAS message [SRC-002].\n  * Subsequent SM NAS message responses received by the AMF over an access are transported over the same access, ensured by the serving PLMN [SRC-002].\n  * The SMF handles the Session Management part of NAS signalling exchanged with the UE [SRC-002].\n\n* **N11 Related Interaction:**\n  * The AMF reports UE reachability based on a subscription from the SMF, including UE location information with respect to the SMF's area of interest [SRC-002].\n  * The SMF indicates to the AMF when a PDU Session has been released [SRC-002].\n  * Upon successful PDU Session Establishment, the AMF stores the serving SMF's identification, and the SMF stores the serving AMF's identification (including the AMF set) [SRC-002].\n\n* **N2 Related Interaction:**\n  * For N2 signalling requiring actions from both the AMF and SMF (such as handover signalling), the AMF ensures coordination and may forward SM N2 signalling to the corresponding SMF based on the PDU Session ID [SRC-002].\n\n* **Charging and Regulatory Support (IMS/SMS):**\n  * At the time of PDU Session Establishment, the AMF provides the SMF with the UE's PEI, if available at the AMF [SRC-002].\n\n* **Additional Functions:**\n  * The AMF is responsible for selecting the SMF per specified procedures and retrieves subscription data and UE-AMBR from the UDM [SRC-002].\n  * When the UPF makes the SMF aware that DL data has arrived for a UE without downlink N3 tunnel information, the SMF interacts with the AMF to initiate the Network Triggered Service Request procedure (provided the UE is reachable and conditions are met) [SRC-002].",
+      "retrieved_keys": [
+        "23.501#5.34.7.3",
+        "23.501#5.6.2",
+        "23.502#4.23.7.2.3",
+        "23.502#5.2.8.2.1",
+        "23.501#5.34.7.1",
+        "23.502#4.3.2.2.4",
+        "23.502#5.2.8.2.5",
+        "23.502#4.23.4.1"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 1.0,
+        "precision_at_5": 0.2,
+        "mrr": 0.5
+      },
+      "citation_valid": true,
+      "hallucinated": false,
+      "latency_s": 18.15
+    },
+    {
+      "id": "l08",
+      "category": "ambiguous",
+      "question": "What is the session?",
+      "expected_refusal": true,
+      "refused": true,
+      "refusal_correct": true,
+      "answer": "I don't have sufficient evidence in the indexed 3GPP standards to answer that reliably. Please provide a more specific question or select a specification/release.",
+      "retrieved_keys": [
+        "23.501#5.8.2.11.2",
+        "23.502#4.22.10.1",
+        "23.501#5.6.4.3",
+        "23.502#4.4.1.1",
+        "23.502#4.3.5.3",
+        "23.501#5.8.2.11.1",
+        "23.503#6.4",
+        "23.501#5.8.2.4.1"
+      ],
+      "retrieval_metrics": null,
+      "citation_valid": null,
+      "hallucinated": null,
+      "latency_s": 12.05
+    },
+    {
+      "id": "l09",
+      "category": "answerable",
+      "question": "What is a PDU Session in the 5G System architecture?",
+      "expected_refusal": false,
+      "refused": true,
+      "refusal_correct": false,
+      "answer": "The available 3GPP documentation does not contain sufficient information to answer this question.",
+      "retrieved_keys": [
+        "23.501#5.6.9.1",
+        "23.501#5.6.13",
+        "23.501#5.27.0",
+        "23.501#5.17.3",
+        "23.501#5.6.1",
+        "23.503#6.1.3.24",
+        "23.501#5.29.3",
+        "23.501#8.3.1"
+      ],
+      "retrieval_metrics": {
+        "recall_at_5": 1.0,
+        "precision_at_5": 0.2,
+        "mrr": 0.2
+      },
+      "citation_valid": null,
+      "hallucinated": null,
+      "latency_s": 72.3
+    },
+    {
+      "id": "l10",
+      "category": "out_of_corpus",
+      "question": "What is the maximum cell radius supported by 4G LTE X2-based handover, and what is the capital of France?",
+      "expected_refusal": true,
+      "refused": true,
+      "refusal_correct": true,
+      "answer": "I don't have sufficient evidence in the indexed 3GPP standards to answer that reliably. Please provide a more specific question or select a specification/release.",
+      "retrieved_keys": [
+        "23.502#4.9.1.2.1",
+        "23.501#5.30.3.4",
+        "23.501#5.30.3.5",
+        "23.501#23.501",
+        "23.502#4.11.1.2.2.2",
+        "23.501#5.31.7.2.1",
+        "23.501#5.3.4.1.2",
+        "23.502#4.11.2.4.1"
+      ],
+      "retrieval_metrics": null,
+      "citation_valid": null,
+      "hallucinated": null,
+      "latency_s": 11.21
+    }
+  ]
+}

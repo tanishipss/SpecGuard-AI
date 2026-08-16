@@ -6,7 +6,12 @@ from backend.retrieval.schemas import RetrievedChunk
 
 @lru_cache(maxsize=1)
 def _get_model():
+    import os
+
+    import torch
     from sentence_transformers import CrossEncoder
+
+    torch.set_num_threads(os.cpu_count() or 4)
 
     return CrossEncoder(settings.reranker_model)
 

@@ -39,6 +39,8 @@ def _resolve_sources(source_ids: list[str], chunks) -> list[ResolvedSource]:
                 section=chunk.section,
                 page=chunk.page_start,
                 snippet=chunk.content[:280],
+                document_id=chunk.document_id,
+                chunk_id=chunk.chunk_id,
             )
         )
     return resolved

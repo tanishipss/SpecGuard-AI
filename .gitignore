@@ -29,9 +29,6 @@ data/*
 !data/README.md
 *.log
 
-# Docker
-*.pid
-
 # OS / editor
 .DS_Store
 Thumbs.db

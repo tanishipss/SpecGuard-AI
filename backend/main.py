@@ -1,13 +1,17 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
+from backend.api.auth import router as auth_router
 from backend.api.chat import router as chat_router
 from backend.api.eval import router as eval_router
 from backend.api.ingest import router as ingest_router
 from backend.api.retrieve import router as retrieve_router
 from backend.config import settings
+from backend.db import get_db
 from backend.observability import configure_logging
 from backend.rate_limit import limiter
 
@@ -25,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(ingest_router, prefix="/api/v1")
 app.include_router(retrieve_router, prefix="/api/v1")
 app.include_router(chat_router, prefix="/api/v1")
@@ -34,3 +39,12 @@ app.include_router(eval_router, prefix="/api/v1")
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/health/db")
+def health_db(db: Session = Depends(get_db)) -> dict:
+    try:
+        db.execute(text("SELECT 1"))
+        return {"database": "connected"}
+    except Exception:
+        return {"database": "unavailable"}

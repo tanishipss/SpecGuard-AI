@@ -24,6 +24,8 @@ class ResolvedSource:
     section: str
     page: int
     snippet: str
+    document_id: str
+    chunk_id: str
 
 
 @dataclass

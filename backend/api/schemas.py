@@ -1,8 +1,59 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from backend.config import settings
+
+
+def _validate_full_name(value: str) -> str:
+    trimmed = value.strip()
+    if not trimmed:
+        raise ValueError("Full name cannot be empty")
+    if len(trimmed) < 2:
+        raise ValueError("Full name is too short")
+    if len(trimmed) > 100:
+        raise ValueError("Full name is too long")
+    return trimmed
+
+
+class SignupRequest(BaseModel):
+    full_name: str = Field(min_length=1, max_length=100)
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, value: str) -> str:
+        return _validate_full_name(value)
+
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=1, max_length=128)
+
+
+class UpdateProfileRequest(BaseModel):
+    full_name: str = Field(min_length=1, max_length=100)
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, value: str) -> str:
+        return _validate_full_name(value)
+
+
+class UserOut(BaseModel):
+    id: str
+    email: str
+    full_name: str | None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
 
 
 class IngestRequest(BaseModel):
@@ -27,8 +78,41 @@ class DocumentOut(BaseModel):
     release: str
     version: str
     ingested_at: datetime
+    chunk_count: int
 
     model_config = {"from_attributes": True}
+
+
+class DocumentSectionOut(BaseModel):
+    chunk_id: str
+    section: str
+    subsection: str | None
+    section_title: str
+    page_start: int
+    page_end: int
+    content: str
+    token_count: int
+
+
+class DocumentDetailOut(BaseModel):
+    id: str
+    spec_number: str
+    title: str
+    release: str
+    version: str
+    ingested_at: datetime
+    chunk_count: int
+    sections: list[DocumentSectionOut]
+
+
+class DocumentSearchResultOut(BaseModel):
+    chunk_id: str
+    section: str
+    subsection: str | None
+    section_title: str
+    page_start: int
+    page_end: int
+    snippet: str
 
 
 class RetrieveRequest(BaseModel):
@@ -85,6 +169,8 @@ class ChatSourceOut(BaseModel):
     section: str
     page: int
     snippet: str
+    document_id: str
+    chunk_id: str
 
 
 class RetrievalMeta(BaseModel):

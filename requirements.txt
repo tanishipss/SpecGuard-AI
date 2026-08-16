@@ -10,6 +10,11 @@ pgvector==0.3.5
 httpx==0.27.2
 slowapi==0.1.9
 
+# Auth
+pyjwt==2.13.0
+bcrypt==5.0.0
+email-validator==2.3.0
+
 # Ingestion
 docling==2.4.2
 pymupdf==1.24.11

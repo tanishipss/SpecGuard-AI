@@ -1,2 +1,300 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  /* Warm ivory surface system — macOS-inspired premium restraint */
+  --color-ivory: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f8f6;
+  --color-border: #e7e7e4;
+  --color-border-strong: #d9d9d5;
+  --color-divider: #eeeeeb;
+
+  /* Forest green primary (structure + selective accent, never everywhere) */
+  --color-forest: #087f6a;
+  --color-forest-hover: #066a58;
+  --color-sage: #087f6a;
+  --color-sage-soft: #dcede8;
+
+  /* Text */
+  --color-ink: #171717;
+  --color-ink-muted: #707070;
+  --color-ink-faint: #9a9a96;
+
+  /* Status — fixed semantics, never decorative */
+  --color-success: #087f6a;
+  --color-success-soft: #dcede8;
+  --color-warning: #b7791f;
+  --color-warning-soft: #fbf2e1;
+  --color-error: #b91c1c;
+  --color-error-soft: #fee2e2;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-editorial: "Fraunces", "Georgia", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  /* Shared elevation tokens — shadows stay quiet; background contrast and
+     whitespace do most of the hierarchy work, not shadow intensity. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 8px 30px rgba(0, 0, 0, 0.035);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.035), 0 10px 32px rgba(0, 0, 0, 0.045);
+  --shadow-lg: 0 4px 10px rgba(0, 0, 0, 0.05), 0 16px 40px rgba(0, 0, 0, 0.07);
+  --shadow-hero: 0 4px 12px rgba(8, 127, 106, 0.06), 0 16px 40px rgba(0, 0, 0, 0.05);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Selective macOS-style translucency — reserved for: the Ask AI input bar,
+   dropdown menus, modal dialogs, floating menus (mobile drawers, popovers),
+   the profile menu, and persistent top-bar/sidebar chrome. Everything else
+   (content cards, lists, main reading surfaces) stays solid + shadow-token,
+   per the design's own repeated "don't glass everything" instruction. */
+.glass,
+.glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.glass-strong {
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Solid elevated surfaces — shadow does the depth work, border is a
+   hairline rather than the primary edge cue. Deliberately set per-side
+   (top/right/bottom only, never the `border-color` shorthand): these rules
+   are emitted after Tailwind's utilities in the cascade, so the shorthand
+   would silently clobber a page-level `border-l-*` accent (e.g. the
+   grounded-answer trust border) applied on the same element. */
+.card-shadow {
+  border-top-color: rgba(20, 24, 31, 0.06);
+  border-right-color: rgba(20, 24, 31, 0.06);
+  border-bottom-color: rgba(20, 24, 31, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-md {
+  border-top-color: rgba(20, 24, 31, 0.06);
+  border-right-color: rgba(20, 24, 31, 0.06);
+  border-bottom-color: rgba(20, 24, 31, 0.06);
+  box-shadow: var(--shadow-md);
+}
+
+.card-lg {
+  border-top-color: rgba(20, 24, 31, 0.06);
+  border-right-color: rgba(20, 24, 31, 0.06);
+  border-bottom-color: rgba(20, 24, 31, 0.06);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-hero {
+  border-top-color: rgba(20, 24, 31, 0.06);
+  border-right-color: rgba(20, 24, 31, 0.06);
+  border-bottom-color: rgba(20, 24, 31, 0.06);
+  box-shadow: var(--shadow-hero);
+}
+
+.card-interactive {
+  border-top-color: rgba(20, 24, 31, 0.06);
+  border-right-color: rgba(20, 24, 31, 0.06);
+  border-bottom-color: rgba(20, 24, 31, 0.06);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 170ms ease-out, transform 170ms ease-out, border-color 170ms ease-out;
+}
+
+.card-interactive:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-interactive {
+    transition: box-shadow 170ms ease-out, border-color 170ms ease-out;
+  }
+  .card-interactive:hover {
+    transform: none;
+  }
+}
+
+.icon-tile {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary-glow:hover {
+  box-shadow: 0 4px 14px rgba(14, 124, 107, 0.25);
+}
+
+/* Premium composer focus state — subtle forest-green ring, not a neon glow. */
+.input-focus-ring:focus {
+  outline: none;
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 3px rgba(8, 127, 106, 0.1);
+}
+
+* {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawerIn {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.evidence-highlight {
+  background-color: var(--color-sage-soft);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* Editorial serif reserved for PageShell page titles only — deliberate
+   contrast against clean Inter body/UI text. Not a replacement for
+   font-display, which other headings (card titles, hero, etc.) keep. */
+.page-title {
+  font-family: var(--font-editorial);
+  font-weight: 600;
+  font-size: 31px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Visible keyboard-focus ring on every interactive element that doesn't
+   already define its own focus treatment. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role='button']:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 200ms ease-out both;
+}
+
+.fade-in-up-1 {
+  animation-delay: 40ms;
+}
+
+.fade-in-up-2 {
+  animation-delay: 80ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up,
+  .fade-in-up-1,
+  .fade-in-up-2 {
+    animation: none;
+  }
+}
+
+/* Answer content hierarchy — top-level bulleted "headers" (a bold lead-in
+   directly inside the top-level list) get more presence; anything nested
+   one level deeper (a sub-list of a sub-list) is de-emphasized. Plain CSS
+   descendant selectors do this without needing to inspect markdown AST
+   nesting depth in the react-markdown component overrides. */
+.answer-content > ul > li > strong,
+.answer-content > ol > li > strong {
+  display: block;
+  font-size: 15px;
+  margin-top: 1rem;
+}
+
+.answer-content > ul > li:first-child > strong,
+.answer-content > ol > li:first-child > strong {
+  margin-top: 0;
+}
+
+.answer-content ul ul,
+.answer-content ul ol,
+.answer-content ol ul,
+.answer-content ol ol {
+  margin-top: 0.25rem;
+  padding-left: 1.25rem;
+  color: var(--color-ink-muted);
+}
+
+/* Circular progress ring for the Index Coverage stat — stroke-dasharray
+   percentage set inline per-instance via a CSS custom property. */
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring circle {
+  stroke-dasharray: var(--ring-circumference);
+  stroke-dashoffset: calc(var(--ring-circumference) * (1 - var(--ring-percent)));
+  transition: stroke-dashoffset 400ms ease-out;
+}
+
+/* Purely decorative dot-grid texture for unused sidebar whitespace —
+   applied to a spacer element, never behind nav items themselves. */
+.sidebar-texture {
+  background-image: radial-gradient(var(--color-ink-faint) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0.05;
+  pointer-events: none;
+}

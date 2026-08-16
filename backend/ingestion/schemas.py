@@ -29,7 +29,7 @@ class ParsedDocument:
     document_hash: str
     sections: list[ParsedSection] = field(default_factory=list)
     heading_index: dict[str, str] = field(default_factory=dict)
-    parser_used: str = "docling"
+    parser_used: str = "pymupdf"
 
 
 @dataclass
